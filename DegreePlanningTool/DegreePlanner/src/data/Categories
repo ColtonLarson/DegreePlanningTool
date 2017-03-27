@@ -1,0 +1,58 @@
+##These are comments. The '##' character are ignored on parsing.
+##The file is layed out as such: 
+##Name of category
+##Category id
+##The minimum number of credits required for that category
+##Description (general information or rules)
+Basic Competencies(AUCC)
+1
+7
+Must be completed in the Freshman year.
+categoryName:Core Competencies(AUCC)
+2
+3
+Choose from the following:
+Natural Science I
+3
+7
+Biological and Physical Sciences: A minimum of seven (7) credits from two different Departments selected only from the list immediately following (at least one course must have a laboratory component [marked with an L below]).
+Natural Science II
+13
+12-[3]
+In addition students must also take enough additional science credit to equal 12 total science credits. The additional hours may be taken from the list above or the following list:
+Arts and Humanities
+4
+6
+Select two from the following. Note: no more than 3 credits of foreign language (L200, L201, L300 may count in this category).
+Social and Behavioral Sciences
+5
+3
+Choose one of the following:
+Historical Perspectives
+6
+3
+Choose one of the following:
+Global and Cultural Awareness
+7
+3
+Choose one of the following:
+Core Computer Science
+8
+34
+Requires the follow:
+Group I
+9
+16
+Choose four of the following (including at least one marked of these (CS410,CS414,CS435,CS440,CS454,CS455,CS464,CS474):
+Group II
+10
+9
+Choose three of the following:
+Math and Stats
+11
+9
+Requires the following:
+Free Electives
+12
+12
+Two electives must be numbered at a level of 300 or above:
