@@ -16,6 +16,8 @@ public class RightPanel extends Application{
 	private VBox TreeBox = new VBox();
 	private Text information = new Text();
 	private Label title = new Label();
+	private Text prereq = new Text();
+	private Text restrictions = new Text();
 	
 	public RightPanel(){
 		setUpPanel();
@@ -47,7 +49,7 @@ public class RightPanel extends Application{
 		//first run purposes only
 		InfoBox.setStyle("-fx-background-color: #367044;");
 		InfoBox.setPadding(new Insets(10));
-		InfoBox.setSpacing(8);
+		InfoBox.setSpacing(10);
 		InfoBox.setMinWidth(450);
 		InfoBox.setMinHeight(400);
 		InfoBox.autosize();
@@ -58,10 +60,20 @@ public class RightPanel extends Application{
 		information.setText("Information provided here...");
 		information.setFill(Color.WHITE);
 		InfoBox.getChildren().add(information);
+		prereq.setFill(Color.WHITE);
+		InfoBox.getChildren().add(prereq);
+		restrictions.setFill(Color.WHITE);
+		InfoBox.getChildren().add(restrictions);
 	}
 	
-	public void updateInfoBox(String title, String info){
-		this.title.setText(title + " Information");
-		information.setText(info);
+	public void updateInfoBox(Course course){
+		title.setWrapText(true);
+		title.setText(course.getCourseName() + " Information");
+		information.setWrappingWidth(400);
+		information.setText("Description: \n" + "\t" + (course.getDescription().isEmpty() ? "None" : course.getDescription()) + "\n");
+		prereq.setWrappingWidth(400);
+		prereq.setText("Prerequisite(s): " + course.getPrerequisite() + "\n");
+		restrictions.setWrappingWidth(400);
+		restrictions.setText("Restrictions: " + (course.getRestriction().isEmpty() ? "None" : course.getRestriction()));
 	}
 }

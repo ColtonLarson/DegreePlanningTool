@@ -98,7 +98,7 @@ public class LeftPanel extends Application {
 		panel.setMinWidth(440);
 		panel.setMaxHeight(975);
 		panel.autosize();
-		yearComboBox.setPrefSize(105, 20);
+		yearComboBox.setPrefSize(125, 20);
 		yearComboBox.getSelectionModel().selectedIndexProperty()
 				.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
 					yearComboBox.setPromptText(
@@ -114,8 +114,8 @@ public class LeftPanel extends Application {
 		removeButton.setOnMouseClicked(e -> {
 			removeYear(yearTextField.getText());
 		});
-		yearTextField.setPromptText("Ex: XXXX-XXXX");
-		yearTextField.setMaxSize(150, 10);
+		yearTextField.setPromptText("XXXX-XXXX");
+		yearTextField.setMaxSize(100, 10);
 		top.getChildren().addAll(yearComboBox, yearTextField, addYearButton, removeButton);
 		TextField courseTextField = new TextField();
 		courseTextField.setPromptText("Ex: BZ110");
@@ -136,12 +136,11 @@ public class LeftPanel extends Application {
 	private void setTables(int year) {
 		for (int i = 0; i < 3; i++) {
 			TableView<Course> table = new TableView<Course>();
-			
 			table.getSelectionModel().selectedIndexProperty()
 			.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
 				//TODO: Update the remove box based on selection
-				DegreePlannerUI.getRightPanel().updateInfoBox(table.getItems().get(table.getSelectionModel().selectedIndexProperty().get()).getCourseName(), "Temp");
-				//table.getItems().get(table.getSelectionModel().selectedIndexProperty().get()).getName();
+				DegreePlannerUI.getRightPanel().updateInfoBox(table.getItems().get(table.getSelectionModel().selectedIndexProperty().get()));
+				
 			});
 			table.setStyle("-fx-background-color: #a9a9a9;");
 			table.setMaxSize(420, 300);
@@ -149,9 +148,9 @@ public class LeftPanel extends Application {
 			TableColumn<Course, String> creditCol = new TableColumn<>("Credits");
 			creditCol.setStyle("-fx-alignment: CENTER;");
 			classCol.prefWidthProperty().bind(table.widthProperty().multiply(0.75));
-			classCol.setCellValueFactory(new PropertyValueFactory<Course, String>("name"));
+			classCol.setCellValueFactory(new PropertyValueFactory<Course, String>("courseID"));
 			creditCol.prefWidthProperty().bind(table.widthProperty().multiply(0.25));
-			creditCol.setCellValueFactory(new PropertyValueFactory<Course, String>("credit"));
+			creditCol.setCellValueFactory(new PropertyValueFactory<Course, String>("credits"));
 			table.getColumns().addAll(classCol, creditCol);
 			ObservableList<Course> classes = FXCollections.observableArrayList();
 			Collections.copy(classes, CourseData.get(year * 3 + i));
@@ -238,7 +237,7 @@ public class LeftPanel extends Application {
 		else{
 			for (int i = year * 3; i < ((year * 3) + 3); i++) {
 				for (int j = 0; j < CourseData.get(i).size(); j++) {
-					if (CourseData.get(i).get(j).getCourseName().equals(course)) {
+					if (CourseData.get(i).get(j).getCourseID().equals(course)) {
 						CourseData.get(i).remove(j);
 						found = true;
 					}
@@ -249,5 +248,9 @@ public class LeftPanel extends Application {
 			else
 				AlertBox.display("Remove Course", "The course '" + course + "' was not found in selected year.");
 		}
+	}
+	
+	public int getSelectedYear(){
+		return yearComboBox.getSelectionModel().getSelectedIndex();
 	}
 }

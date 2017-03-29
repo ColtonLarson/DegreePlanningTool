@@ -37,6 +37,7 @@ public class CenterPanel extends Application{
 	private HBox bottom = new HBox();
 	private ArrayList<Label> quickProgress = new ArrayList<Label>();
 	private ArrayList<Course> searchDisplay = new ArrayList<Course>();
+	private VBox selected = new VBox();
 	public CenterPanel(){
 		try {
 			dataManager.setCourseList();
@@ -67,7 +68,7 @@ public class CenterPanel extends Application{
 		top.setSpacing(8);
 		TextField search = new TextField();
 		search.setPromptText("'Course Name', 'Course Title', or 'Category'");
-		search.setPrefSize(300, 20);
+		search.setPrefSize(450, 20);
 		ObservableList<String> searchOptions = FXCollections.observableArrayList("Course Name", "Course Title", "Category");
 		Button searchButton = new Button("Search");
 		ComboBox searchComboBox = new ComboBox(searchOptions);
@@ -101,7 +102,7 @@ public class CenterPanel extends Application{
 		scrollPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		scrollPane.autosize();
 		scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER);
+		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 	}
 
 	private void setBottomPanel(){
@@ -133,22 +134,68 @@ public class CenterPanel extends Application{
 	
 	private void UpdateCenterPanel(){
 		VBox searchDisplayPanes = new VBox();
+		searchDisplayPanes.setPrefSize(1200, 200);
 		searchDisplayPanes.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		searchDisplayPanes.autosize();
 		for(int i = 0; i < searchDisplay.size(); i++){
-			VBox panel = new VBox(10);
-			panel.setPadding(new Insets(25));
-			Text name = new Text(searchDisplay.get(i).toString());
-			name.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
-			Text title = new Text("\t" + searchDisplay.get(i).getCourseName() + "\n");
-			panel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-			panel.autosize();
-			panel.getChildren().addAll(name, title);
-			panel.setBorder(new Border(new BorderStroke(Color.BLACK, 
+			BorderPane bPane = new BorderPane();
+			bPane.setPrefSize(400, 200);
+			bPane.setBorder(new Border(new BorderStroke(Color.BLACK, 
 		            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-			searchDisplayPanes.getChildren().add(panel);
+			bPane.setTop(getLeftCoursePane(i));
+			bPane.setCenter(getRightCoursePane(i));
+			searchDisplayPanes.getChildren().add(bPane);
 		}
 		scrollPane.setContent(searchDisplayPanes);
 		
+	}
+	
+	//Add another param for parent
+	private VBox getLeftCoursePane(int i){
+		Text name = new Text(searchDisplay.get(i).toString() + "\t" + searchDisplay.get(i).getCourseName());
+		name.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
+		VBox panel = new VBox();
+		panel.setStyle("-fx-background-color: #afafaf;");
+		panel.setOnMouseClicked(e -> {
+			if(!selected.equals(panel)){
+				selected.setStyle("-fx-background-color: #afafaf;");
+				selected = panel;
+				selected.setStyle("-fx-background-color: #b38808;");
+			}
+			DegreePlannerUI.getRightPanel().updateInfoBox(searchDisplay.get(i));
+		});
+		
+		panel.setPrefSize(450, 15);
+		panel.setPadding(new Insets(15));
+		//panel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		panel.autosize();
+		panel.getChildren().addAll(name);
+		return panel;
+	}
+	
+	//Add another param for parent
+	private HBox getRightCoursePane(int i){
+		HBox pane = new HBox(10);
+		pane.setOnMouseClicked(e -> {
+			DegreePlannerUI.getRightPanel().updateInfoBox(searchDisplay.get(i));
+		});
+		pane.setPadding(new Insets(15));
+		pane.setAlignment(Pos.CENTER_LEFT);
+		Text addCourse = new Text("Add Course: ");
+		addCourse.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
+		Button addFall = new Button("Fall");
+		addFall.setOnMouseClicked(e -> {
+			DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 0, searchDisplay.get(i));
+		});
+		Button addSpring = new Button("Spring");
+		addSpring.setOnMouseClicked(e -> {
+			DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 1, searchDisplay.get(i));
+		});
+		Button addSummer = new Button("Summer");
+		addSummer.setOnMouseClicked(e -> {
+			DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 2, searchDisplay.get(i));
+		});
+		pane.getChildren().addAll(addCourse, addFall, addSpring, addSummer);
+		return pane;
 	}
 }
