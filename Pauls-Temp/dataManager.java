@@ -18,6 +18,8 @@ public class dataManager{
 	private static final String courseDataURL = "http://www.cs.colostate.edu/~pbivrell/courseData";
 	private static final String categoryToCourseURL = "http://www.cs.colostate.edu/~pbivrell/courseToCategory";
 
+	//THIS
+
 	public static void main(String[] args){
 		initData();
 	}
