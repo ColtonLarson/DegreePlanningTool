@@ -20,7 +20,7 @@ public class dataManager{
 		initCourseList();
 		System.out.println(Arrays.toString(courseList.toArray()));
 	
-		ArrayList<Course> test = searchByName("C",0,4);
+		ArrayList<Course> test = searchByTitle("Int",0,4);
 		System.out.println(Arrays.toString(test.toArray()));
 
 		//test = searchByID("CS");
@@ -32,6 +32,9 @@ public class dataManager{
 		ArrayList<Course> result = new ArrayList<Course>(size);
 		
 		for(Course temp : courseList){
+			if(searchText.length() > temp.getCourseID().length()){
+				continue;
+			}
 			if(temp.getCourseID().substring(0,searchText.length()).equals(searchText)){
 					result.add(temp);
 			}
@@ -41,6 +44,10 @@ public class dataManager{
 
 		if(credits != 0){ result = subSearchCredits(result, credits); }
 		
+		result.add(new Course(13,"","Build Your Own",-1,"",
+		"This course is used to define course which are not listed here. If you add this course you will be prompted to fill out some information about it.",
+						"","","","","","",""));
+		
 		return result;
 	}
 	
@@ -48,14 +55,21 @@ public class dataManager{
 		ArrayList<Course> result = new ArrayList<Course>(size);
 		
 		for(Course temp : courseList){
+			if(searchText.length() > temp.getCourseName().length()){
+				continue;
+			}
 			if(temp.getCourseName().substring(0,searchText.length()).equals(searchText)){
 					result.add(temp);
 			}
 		}
-
+		
 		if(category != 0){ result = subSearchCategory(result, category); }
 
 		if(credits != 0){ result = subSearchCredits(result, credits); }
+		
+		result.add(new Course(13,"","Build Your Own",-1,"",
+		"This course is used to define course which are not listed here. If you add this course you will be prompted to fill out some information about it.",
+						"","","","","","",""));
 		
 		return result;
 	}
@@ -74,11 +88,9 @@ public class dataManager{
 		ArrayList<Course> result = new ArrayList<Course>(size);
 		for(Course temp : list){
 			if(temp.getCredits() == credits){
-			//	System.out.println(temp.getCourseID() + ": " + credits + " = " + temp.getCredits());
 				result.add(temp);
 			}
 		}
-		//System.out.println("SHOULD : " + Arrays.toString(result.toArray()));
 		return result;
 	}
 
