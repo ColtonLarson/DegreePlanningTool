@@ -40,7 +40,7 @@ public class CenterPanel extends Application{
 	private VBox selected = new VBox();
 	public CenterPanel(){
 		try {
-			dataManager.initCourseList();
+			dataManager.initData();
 		} catch (Exception e) {
 			System.out.print(e.toString());
 		}

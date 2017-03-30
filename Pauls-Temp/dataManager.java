@@ -15,19 +15,47 @@ public class dataManager{
 	private static ArrayList<Course> courseList;
 	private static Map categoryToCourse;
 	private static int size = 0;	
+	private static final String courseDataURL = "http://www.cs.colostate.edu/~pbivrell/courseData";
+	private static final String categoryToCourseURL = "http://www.cs.colostate.edu/~pbivrell/courseToCategory";
 
 	public static void main(String[] args){
-		initCourseList();
-		System.out.println(Arrays.toString(courseList.toArray()));
-	
-		ArrayList<Course> test = searchByTitle("Int",0,4);
-		System.out.println(Arrays.toString(test.toArray()));
-
-		//test = searchByID("CS");
-		//System.out.println(Arrays.toString(test.toArray()));
+		initData();
 	}
 
 	
+	public static void initData(){
+		fillCourseList();
+		//initCategoryMap();
+	}
+	
+	private static Scanner openURL(String urlText){
+		Scanner reader = null;
+		try{
+			URL url = new URL(urlText);
+			URLConnection con = url.openConnection();
+			InputStream is =con.getInputStream();
+			reader = new Scanner(is);
+		}catch(Exception e){
+			ErrorLogger.error("" + e);
+		}
+
+		return reader;
+	}
+
+	//Everything below here has to do with the categoryToCourse map
+	//The following Methods are data mutators
+	private static void initCategoryMap(){
+		Scanner reader = null;  
+		reader = openURL(categoryToCourseURL);	
+	
+		while(reader.hasNextLine()){
+			String s = reader.nextLine();
+			//String category
+		}
+	}
+
+	//Everything bellow here has to do with the CourseList
+	//The following Methods are data accessors
 	public static ArrayList<Course> searchByName(String searchText, int category, int credits){
 		ArrayList<Course> result = new ArrayList<Course>(size);
 		
@@ -95,6 +123,7 @@ public class dataManager{
 	}
 
 
+	//The following Methods are data mutators
 	private static Course buildCourse(Scanner reader){
 		int category = 0, credits = 0;
 		String courseID = "",courseName = "",creditLayout = "",description = "",gradeMode = "",
@@ -121,24 +150,11 @@ public class dataManager{
 						  prerequisite,registrationInfo,restriction,alsoOfferedAs,courseFee,termOffered);
 	}
 
-	private static Scanner openURL(){
-		Scanner reader = null;
-		try{
-			URL url = new URL("http://www.cs.colostate.edu/~pbivrell/courseData");
-			URLConnection con = url.openConnection();
-			InputStream is =con.getInputStream();
-			reader = new Scanner(is);
-		}catch(Exception e){
-			ErrorLogger.error("" + e);
-		}
-
-		return reader;
-	}
 	
-	public static void initCourseList(){
+/*	private static void initCourseList(){
 
 		Scanner reader = null;
-		reader = openURL();
+		reader = openURL(courseDataURL);
 
 		int lineCount = 0;	
 		try{
@@ -150,13 +166,14 @@ public class dataManager{
 			ErrorLogger.error("" + e);
 		}
 		size=lineCount/13;
-		courseList = new ArrayList<Course>(size);		
 		fillArrayList();
 	}
-	
-	private static void fillArrayList(){
+	*/
+	private static void fillCourseList(){
 		Scanner reader = null;  //Set to null for java type checker
-		reader = openURL();	
+		reader = openURL(courseDataURL);	
+		
+		courseList = new ArrayList<Course>(size);		
 	
 		while(reader.hasNextLine()){
 			Course temp = buildCourse(reader);
@@ -166,9 +183,10 @@ public class dataManager{
 	}
 
 
+	//The following methods are for debugging proposes only
 	public static void validateData(){
-		Scanner reader = null;  //Set to null for java type checker
-		reader = openURL();	
+		Scanner reader = null; 
+		reader = openURL(courseDataURL);	
 	
 		while(reader.hasNextLine()){
 			validateBlock(reader);
