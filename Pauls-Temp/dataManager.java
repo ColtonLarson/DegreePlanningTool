@@ -65,7 +65,7 @@ public class dataManager{
 			if(searchText.length() > temp.getCourseID().length()){
 				continue;
 			}
-			if(temp.getCourseID().substring(0,searchText.length()).equals(searchText)){
+			if(temp.getCourseID().substring(0,searchText.length()).toLowerCase().equals(searchText.toLowerCase())){
 					result.add(temp);
 			}
 		}
@@ -88,7 +88,7 @@ public class dataManager{
 			if(searchText.length() > temp.getCourseName().length()){
 				continue;
 			}
-			if(temp.getCourseName().substring(0,searchText.length()).equals(searchText)){
+			if(temp.getCourseName().substring(0,searchText.length()).toLowerCase().equals(searchText.toLowerCase())){
 					result.add(temp);
 			}
 		}
