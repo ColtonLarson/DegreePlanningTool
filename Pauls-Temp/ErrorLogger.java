@@ -2,6 +2,10 @@ import javax.swing.JOptionPane;
 
 public class ErrorLogger{
 
+	public static void main(String[] args){
+		ErrorLogger.error("BADNESS");
+	}
+
 	public static void error(String error){
 		
 		try{
@@ -13,6 +17,4 @@ public class ErrorLogger{
 		System.exit(-1);
 	}
 
-	public static void main(String[] args){
-	}
 }

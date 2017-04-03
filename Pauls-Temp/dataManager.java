@@ -13,21 +13,19 @@ import java.net.URLConnection;
 public class dataManager{
 
 	private static ArrayList<Course> courseList;
-	private static Map categoryToCourse;
+	private static ArrayList<Category> categoryList;
 	private static int size = 0;	
 	private static final String courseDataURL = "http://www.cs.colostate.edu/~pbivrell/courseData";
-	private static final String categoryToCourseURL = "http://www.cs.colostate.edu/~pbivrell/courseToCategory";
-
-	//THIS
+	private static final String categoryToCourseURL = "http://www.cs.colostate.edu/~pbivrell/categories";
 
 	public static void main(String[] args){
 		initData();
+		System.out.println(Arrays.toString(categoryList.toArray()));
 	}
-
 	
 	public static void initData(){
 		fillCourseList();
-		//initCategoryMap();
+		initCategory();
 	}
 	
 	private static Scanner openURL(String urlText){
@@ -45,17 +43,48 @@ public class dataManager{
 	}
 
 	//Everything below here has to do with the categoryToCourse map
-	//The following Methods are data mutators
-	private static void initCategoryMap(){
-		Scanner reader = null;  
-		reader = openURL(categoryToCourseURL);	
 	
-		while(reader.hasNextLine()){
-			String s = reader.nextLine();
-			//String category
+	public static Category getCategoryByID(int id){
+		for(Category temp : categoryList){
+			if(temp.getCategoryID() == id){
+				return temp;
+			}
 		}
+		return categoryList.get(categoryList.size()-1);
 	}
 
+	//The following Methods are data mutators
+	private static void initCategory(){
+		Scanner reader = null;  
+		reader = openURL(categoryToCourseURL);	
+		
+		categoryList = new ArrayList<Category>();		
+	
+		while(reader.hasNextLine()){
+			Category temp = buildCategory(reader);
+			if(temp != null)
+			categoryList.add(temp);
+		}
+	}
+	
+	private static Category buildCategory(Scanner reader){
+		int creditsRequired = 0, categoryID = 0;
+		String categoryName = "", description = "";	
+	
+		try{
+			categoryName = reader.nextLine();
+			categoryID = Integer.parseInt(reader.nextLine());
+			creditsRequired = Integer.parseInt(reader.nextLine());
+			description = reader.nextLine();
+		
+		}catch(Exception e){
+			ErrorLogger.error("" + e);
+		}
+		return new Category(categoryName,categoryID,creditsRequired,description);
+	}
+
+
+	
 	//Everything bellow here has to do with the CourseList
 	//The following Methods are data accessors
 	public static ArrayList<Course> searchByName(String searchText, int category, int credits){
@@ -152,30 +181,11 @@ public class dataManager{
 						  prerequisite,registrationInfo,restriction,alsoOfferedAs,courseFee,termOffered);
 	}
 
-	
-/*	private static void initCourseList(){
-
-		Scanner reader = null;
-		reader = openURL(courseDataURL);
-
-		int lineCount = 0;	
-		try{
-			while(reader.hasNextLine()){
-				reader.nextLine();
-				lineCount++;
-			}
-		}catch(Exception e){
-			ErrorLogger.error("" + e);
-		}
-		size=lineCount/13;
-		fillArrayList();
-	}
-	*/
 	private static void fillCourseList(){
 		Scanner reader = null;  //Set to null for java type checker
 		reader = openURL(courseDataURL);	
 		
-		courseList = new ArrayList<Course>(size);		
+		courseList = new ArrayList<Course>();		
 	
 		while(reader.hasNextLine()){
 			Course temp = buildCourse(reader);

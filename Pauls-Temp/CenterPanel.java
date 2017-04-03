@@ -181,15 +181,28 @@ public class CenterPanel extends Application{
 		addCourse.setFont(Font.font("Verdana", FontWeight.NORMAL, 12));
 		Button addFall = new Button("Fall");
 		addFall.setOnMouseClicked(e -> {
-			DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 0, searchDisplay.get(i));
+			if(searchDisplay.get(i).getCredits() == -1){
+				
+				DegreePlannerUI.getLeftPanel().addCourse();
+			}else{
+				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 0, searchDisplay.get(i));
+			}
 		});
 		Button addSpring = new Button("Spring");
 		addSpring.setOnMouseClicked(e -> {
-			DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 1, searchDisplay.get(i));
+			if(searchDisplay.get(i).getCredits() == -1){
+				DegreePlannerUI.getLeftPanel().addCourse();
+			}else{
+				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 1, searchDisplay.get(i));
+			}
 		});
 		Button addSummer = new Button("Summer");
 		addSummer.setOnMouseClicked(e -> {
-			DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 2, searchDisplay.get(i));
+			if(searchDisplay.get(i).getCredits() == -1){
+				DegreePlannerUI.getLeftPanel().addCourse();
+			}else{
+				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 2, searchDisplay.get(i));
+			}
 		});
 		pane.getChildren().addAll(addCourse, addFall, addSpring, addSummer);
 		return pane;
