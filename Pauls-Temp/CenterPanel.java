@@ -182,8 +182,8 @@ public class CenterPanel extends Application{
 		Button addFall = new Button("Fall");
 		addFall.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
-				
-				DegreePlannerUI.getLeftPanel().addCourse();
+				//DegreePlannerUI.getLeftPanel().addCourse();
+				System.out.println("ADDING BYO COURSE");
 			}else{
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 0, searchDisplay.get(i));
 			}
@@ -191,7 +191,8 @@ public class CenterPanel extends Application{
 		Button addSpring = new Button("Spring");
 		addSpring.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
-				DegreePlannerUI.getLeftPanel().addCourse();
+				//DegreePlannerUI.getLeftPanel().addCourse();
+				System.out.println("ADDING BYO COURSE");
 			}else{
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 1, searchDisplay.get(i));
 			}
@@ -199,7 +200,8 @@ public class CenterPanel extends Application{
 		Button addSummer = new Button("Summer");
 		addSummer.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
-				DegreePlannerUI.getLeftPanel().addCourse();
+				//DegreePlannerUI.getLeftPanel().addCourse();
+				System.out.println("ADDING BYO COURSE");
 			}else{
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 2, searchDisplay.get(i));
 			}
