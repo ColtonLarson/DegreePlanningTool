@@ -40,7 +40,7 @@ public class CenterPanel extends Application{
 	private VBox selected = new VBox();
 	public CenterPanel(){
 		try {
-			dataManager.initData();
+			DataManager.initData();
 		} catch (Exception e) {
 			System.out.print(e.toString());
 		}
@@ -77,11 +77,11 @@ public class CenterPanel extends Application{
 		searchButton.setOnMouseClicked(e -> {
 			switch(searchComboBox.getSelectionModel().selectedIndexProperty().getValue()){
 			case 0:
-				searchDisplay = dataManager.searchByName(search.getText(),0,0);
+				searchDisplay = DataManager.searchByName(search.getText(),0,0);
 				UpdateCenterPanel();
 				break;
 			case 1:
-				searchDisplay = dataManager.searchByTitle(search.getText(),0,0);
+				searchDisplay = DataManager.searchByTitle(search.getText(),0,0);
 				UpdateCenterPanel();
 				break;
 			default:
@@ -186,7 +186,6 @@ public class CenterPanel extends Application{
 				//Call Constructor new Course(int category,String courseID, String courseName, int credits, String description); 
 				System.out.println("ADDING BYO COURSE");
 			}else{
-				System.out.println(DegreePlannerUI.getLeftPanel().getSelectedYear());
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 0, searchDisplay.get(i));
 			}
 		});
