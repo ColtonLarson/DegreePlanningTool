@@ -14,6 +14,7 @@ public class dataManager{
 
 	private static ArrayList<Course> courseList;
 	private static ArrayList<Category> categoryList;
+	private static ArrayList<Course> userData;
 	private static int size = 0;	
 	private static final String courseDataURL = "http://www.cs.colostate.edu/~pbivrell/courseData";
 	private static final String categoryToCourseURL = "http://www.cs.colostate.edu/~pbivrell/categories";
@@ -42,7 +43,7 @@ public class dataManager{
 		return reader;
 	}
 
-	//Everything below here has to do with the categoryToCourse map
+	//Everything below here has to do with the categories map
 	
 	public static Category getCategoryByID(int id){
 		for(Category temp : categoryList){
@@ -51,6 +52,10 @@ public class dataManager{
 			}
 		}
 		return categoryList.get(categoryList.size()-1);
+	}
+
+	public ArrayList<Category> getCategories(){
+		return categoryList;
 	}
 
 	//The following Methods are data mutators

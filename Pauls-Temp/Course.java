@@ -41,6 +41,27 @@ public class Course{
 		this.courseFee = courseFee;
 		this.termOffered = termOffered;
 	}
+	
+	public Course(int category,
+				  String courseID,
+				  String courseName,
+				  int credits,
+				  String description)
+	{
+		this.category = category;
+		this.credits = credits;
+		this.courseID = courseID;
+		this.courseName = courseName;
+		this.creditLayout = "N/A";
+		this.description = description + " [This was course built by the user]";
+		this.gradeMode = "N/A";
+		this.prerequisite = "N/A";
+		this.registrationInfo = "N/A";
+		this.restriction = "N/A";
+		this.alsoOfferedAs = "N/A";
+		this.courseFee = "N/A";
+		this.termOffered = "N/A";
+	}
 
 	public int getCategory()			{ return category; }
 	public String getCourseID() 		{ return courseID; }

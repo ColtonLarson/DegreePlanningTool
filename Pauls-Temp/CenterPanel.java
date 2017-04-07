@@ -183,8 +183,10 @@ public class CenterPanel extends Application{
 		addFall.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
 				//DegreePlannerUI.getLeftPanel().addCourse();
+				//Call Constructor new Course(int category,String courseID, String courseName, int credits, String description); 
 				System.out.println("ADDING BYO COURSE");
 			}else{
+				System.out.println(DegreePlannerUI.getLeftPanel().getSelectedYear());
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 0, searchDisplay.get(i));
 			}
 		});
@@ -192,6 +194,7 @@ public class CenterPanel extends Application{
 		addSpring.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
 				//DegreePlannerUI.getLeftPanel().addCourse();
+				//Call Constructor new Course(int category,String courseID, String courseName, int credits, String description); 
 				System.out.println("ADDING BYO COURSE");
 			}else{
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 1, searchDisplay.get(i));
@@ -201,6 +204,7 @@ public class CenterPanel extends Application{
 		addSummer.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
 				//DegreePlannerUI.getLeftPanel().addCourse();
+				//Call Constructor new Course(int category,String courseID, String courseName, int credits, String description); 
 				System.out.println("ADDING BYO COURSE");
 			}else{
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 2, searchDisplay.get(i));
