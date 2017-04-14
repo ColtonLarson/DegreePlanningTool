@@ -1,4 +1,4 @@
-compile:
+compile: binDIR
 	javac -d bin src/*.java
 
 clean:
@@ -6,3 +6,6 @@ clean:
 
 run: compile
 	java -cp bin/ DegreePlannerUI
+
+binDIR:
+	mkdir bin
