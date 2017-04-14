@@ -8,4 +8,4 @@ run: compile
 	java -cp bin/ DegreePlannerUI
 
 binDIR:
-	mkdir bin
+	mkdir -p bin

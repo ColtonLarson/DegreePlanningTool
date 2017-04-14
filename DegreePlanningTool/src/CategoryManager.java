@@ -30,7 +30,7 @@ public class CategoryManager{
                 return cat.getCategoryID();
             }
         }
-        return -1;
+        return 0;
     }
 
 	//The following Methods are data mutators
