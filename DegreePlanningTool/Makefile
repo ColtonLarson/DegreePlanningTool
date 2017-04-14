@@ -1,8 +1,8 @@
-complie:
+compile:
 	javac -d bin src/*.java
 
 clean:
 	rm bin/*.class
 
-run: complie
+run: compile
 	java -cp bin/ DegreePlannerUI

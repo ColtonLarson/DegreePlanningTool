@@ -42,7 +42,10 @@ public class CenterPanel extends Application{
 	private HBox bottom = new HBox();
 	private ArrayList<Label> quickProgress = new ArrayList<Label>();
 	private ArrayList<Course> searchDisplay = new ArrayList<Course>();
+	private ArrayList<VBox> selectionableVBoxs = new ArrayList<VBox>();
 	private VBox selected = new VBox();
+	private ArrayList<Category> copy;
+	
 	public CenterPanel(){
 		try {
 			DataManager.initData();
@@ -86,22 +89,27 @@ public class CenterPanel extends Application{
 		search.autosize();
 		Button searchButton = new Button("Search");
 		searchButton.setOnMouseClicked(e -> {
-			switch(searchComboBox.getSelectionModel().selectedIndexProperty().getValue()){
-			case 0:
-				searchDisplay = DataManager.searchByName(search.getText(),0,0);
-				UpdateCenterPanel();
-				break;
-			case 1:
-				searchDisplay = DataManager.searchByTitle(search.getText(),0,0);
-				UpdateCenterPanel();
-				break;
-			default:
-				//TODO: Not found
-				System.out.println(search.getText());
-				break;
-			};
+            if(search.getText().length() != 0){//EMPTY TextField
+                switch(searchComboBox.getSelectionModel().selectedIndexProperty().getValue()){
+                case 0:
+                    searchDisplay = DataManager.searchByName(search.getText(),DataManager.getCategoryIDByName(copy.get(categoryComboBox.getSelectionModel().selectedIndexProperty().getValue()).getCategoryName()), creditComboBox.getSelectionModel().selectedIndexProperty().getValue());
+                    UpdateCenterPanel();
+                    break;
+                case 1:
+                    searchDisplay = DataManager.searchByTitle(search.getText(), DataManager.getCategoryIDByName(copy.get(categoryComboBox.getSelectionModel().selectedIndexProperty().getValue()).getCategoryName()), creditComboBox.getSelectionModel().selectedIndexProperty().getValue());
+                    UpdateCenterPanel();
+                    break;
+                default:
+                    //TODO: Not found
+                    System.out.println(search.getText());
+                    break;
+                };
+			}
 		});
 		Button progressButton = new Button("  Progress  ");
+		progressButton.setOnMouseClicked(e -> {
+            changeToProgress();
+		});
 		topUpper.getChildren().addAll(searchButton, search, progressButton);
 	}
 	
@@ -118,12 +126,22 @@ public class CenterPanel extends Application{
 		searchComboBox.setPromptText(searchOptions.get(0));
 		searchComboBox.setValue(searchOptions.get(0));
 		
-		ObservableList<String> searchCategory = FXCollections.observableArrayList("Cat1", "Cat2");
+		ObservableList<String> searchCategory = FXCollections.observableArrayList();
+		copy = new ArrayList<Category>(DataManager.getCategories());
+		for(int i = 0; i < copy.size(); i++){
+            searchCategory.add(copy.get(i).getCategoryName());
+		}
 		categoryComboBox = new ComboBox(searchCategory);
 		categoryComboBox.setPromptText(searchCategory.get(0));
 		categoryComboBox.setValue(searchCategory.get(0));
 		
-		ObservableList<String> searchCredit = FXCollections.observableArrayList("0", "1", "2", "3", "4", "5");
+		ObservableList<String> searchCredit = FXCollections.observableArrayList();
+		for(int i = 0; i <= 18; i++){
+            if(i == 0)
+                searchCredit.add("Any");
+            else
+                searchCredit.add(Integer.toString(i));
+		}
 		creditComboBox = new ComboBox(searchCredit);
 		creditComboBox.setPromptText(searchCredit.get(0));
 		creditComboBox.setValue(searchCredit.get(0));
@@ -173,11 +191,11 @@ public class CenterPanel extends Application{
 		searchDisplayPanes.autosize();
 		for(int i = 0; i < searchDisplay.size(); i++){
 			BorderPane bPane = new BorderPane();
-			bPane.setPrefSize(400, 200);
+			bPane.setPrefSize(400, 100);
 			bPane.setBorder(new Border(new BorderStroke(Color.BLACK, 
 		            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-			bPane.setTop(getLeftCoursePane(i));
-			bPane.setCenter(getRightCoursePane(i));
+			bPane.setTop(getTopCoursePane(i));
+			bPane.setCenter(getBottomCoursePane(i));
 			searchDisplayPanes.getChildren().add(bPane);
 		}
 		scrollPane.setContent(searchDisplayPanes);
@@ -185,10 +203,11 @@ public class CenterPanel extends Application{
 	}
 	
 	//Add another param for parent
-	private VBox getLeftCoursePane(int i){
+	private VBox getTopCoursePane(int i){
 		Text name = new Text(searchDisplay.get(i).toString() + "\t" + searchDisplay.get(i).getCourseName());
 		name.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
 		VBox panel = new VBox();
+		selectionableVBoxs.add(panel);
 		panel.setStyle("-fx-background-color: #afafaf;");
 		panel.setOnMouseClicked(e -> {
 			if(!selected.equals(panel)){
@@ -208,10 +227,16 @@ public class CenterPanel extends Application{
 	}
 	
 	//Add another param for parent
-	private HBox getRightCoursePane(int i){
+	private HBox getBottomCoursePane(int i){
 		HBox pane = new HBox(10);
+		pane.setPrefSize(450,25);
 		pane.setOnMouseClicked(e -> {
 			DegreePlannerUI.getRightPanel().updateInfoBox(searchDisplay.get(i));
+			if(!selected.equals(selectionableVBoxs.get(i))){
+				selected.setStyle("-fx-background-color: #afafaf;");
+				selected = selectionableVBoxs.get(i);
+				selected.setStyle("-fx-background-color: #b38808;");
+			}
 		});
 		pane.setPadding(new Insets(15));
 		pane.setAlignment(Pos.CENTER_LEFT);
@@ -220,9 +245,10 @@ public class CenterPanel extends Application{
 		Button addFall = new Button("Fall");
 		addFall.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
-				//DegreePlannerUI.getLeftPanel().addCourse();
-				//Call Constructor new Course(int category,String courseID, String courseName, int credits, String description); 
-				System.out.println("ADDING BYO COURSE");
+				Course toAdd = new Course(AlertBox.makeCourse());
+				if(toAdd != null){
+                    DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(),0,toAdd);
+				}
 			}else{
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 0, searchDisplay.get(i));
 			}
@@ -230,9 +256,10 @@ public class CenterPanel extends Application{
 		Button addSpring = new Button("Spring");
 		addSpring.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
-				//DegreePlannerUI.getLeftPanel().addCourse();
-				//Call Constructor new Course(int category,String courseID, String courseName, int credits, String description); 
-				System.out.println("ADDING BYO COURSE");
+				Course toAdd = new Course(AlertBox.makeCourse());
+				if(toAdd != null){
+                    DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(),0,toAdd);
+				}
 			}else{
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 1, searchDisplay.get(i));
 			}
@@ -240,9 +267,10 @@ public class CenterPanel extends Application{
 		Button addSummer = new Button("Summer");
 		addSummer.setOnMouseClicked(e -> {
 			if(searchDisplay.get(i).getCredits() == -1){
-				//DegreePlannerUI.getLeftPanel().addCourse();
-				//Call Constructor new Course(int category,String courseID, String courseName, int credits, String description); 
-				System.out.println("ADDING BYO COURSE");
+				Course toAdd = new Course(AlertBox.makeCourse());
+				if(toAdd != null){
+                    DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(),0,toAdd);
+				}
 			}else{
 				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 2, searchDisplay.get(i));
 			}
@@ -250,4 +278,45 @@ public class CenterPanel extends Application{
 		pane.getChildren().addAll(addCourse, addFall, addSpring, addSummer);
 		return pane;
 	}
+
+	private void changeToProgress(){
+        //Should have a top HBox with Search Button and ComboBox
+        //Should have a Center ScrollPane
+        //Maybe have a At a Glance HBox(like search)
+        HBox topProgress = new HBox(10);
+        topProgress.setAlignment(Pos.CENTER);
+        topProgress.setPrefSize(450, 50);
+        topProgress.setSpacing(8);
+        topProgress.setStyle("-fx-background-color: #696969;");
+        topProgress.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        Label progressLabel = new Label("Progress Page");
+        ComboBox<String> yearComboBox = new ComboBox<String>(DegreePlannerUI.getLeftPanel().getYears());
+        Button search = new Button("  Search  ");
+        search.setOnMouseClicked(e -> {
+            centerPanel.setTop(top);
+            centerPanel.setCenter(scrollPane);
+            centerPanel.setBottom(bottom);
+        });
+        topProgress.getChildren().addAll(progressLabel, yearComboBox, search);
+        ScrollPane scrollProgress = new ScrollPane();
+        VBox catProgress = new VBox();
+        ArrayList<Category> catList = new ArrayList<Category>(DataManager.getCategories());
+        for(int i = 0; i < catList.size(); i++){
+            BorderPane bPane = new BorderPane();
+			bPane.setPrefSize(400, 100);
+			bPane.setBorder(new Border(new BorderStroke(Color.BLACK, 
+		            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+			//bPane.setTop();
+			//bPane.setCenter();
+			//searchDisplayPanes.getChildren().add(bPane);
+        }
+        centerPanel.setTop(topProgress);
+        centerPanel.setCenter(scrollProgress);
+	}
+	
+	private VBox getTopCategoryPane(){
+        return new VBox();
+	}
 }
+
+    

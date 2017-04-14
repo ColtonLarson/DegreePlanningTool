@@ -23,6 +23,15 @@ public class CategoryManager{
 	public ArrayList<Category> getCategories(){
 		return categoryList;
 	}
+	
+	public int getCategoryIDByName(String name){
+        for(Category cat : categoryList){
+            if(cat.getCategoryName().equals(name)){
+                return cat.getCategoryID();
+            }
+        }
+        return -1;
+    }
 
 	//The following Methods are data mutators
 	private static void initCategory(){

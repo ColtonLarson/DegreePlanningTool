@@ -39,8 +39,12 @@ public class DataManager{
 	public static Category getCategoryByID(int id){
 		return categoryManager.getCategoryByID(id);
 	}
+	
+	public static int getCategoryIDByName(String name){
+		return categoryManager.getCategoryIDByName(name);
+	}
 
-	public ArrayList<Category> getCategories(){
+	public static ArrayList<Category> getCategories(){
 		return categoryManager.getCategories();
 	}
 

@@ -62,6 +62,22 @@ public class Course{
 		this.courseFee = "N/A";
 		this.termOffered = "N/A";
 	}
+	
+	public Course(Course crs){
+        this.category = crs.category;
+        this.credits = crs.credits;
+        this.courseID = crs.courseID;
+        this.courseName = crs.courseName;
+        this.creditLayout = crs.creditLayout;
+        this.description = crs.description;
+        this.gradeMode = crs.gradeMode;
+        this.prerequisite = crs.prerequisite;
+        this.registrationInfo = crs.registrationInfo;
+        this.restriction = crs.restriction;
+        this.alsoOfferedAs = crs.alsoOfferedAs;
+        this.courseFee = crs.courseFee;
+        this.termOffered = crs.termOffered;
+	}
 
 	public int getCategory()			{ return category; }
 	public String getCourseID() 		{ return courseID; }

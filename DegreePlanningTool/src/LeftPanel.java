@@ -253,4 +253,8 @@ public class LeftPanel extends Application {
 	public int getSelectedYear(){
 		return yearComboBox.getSelectionModel().getSelectedIndex();
 	}
+	
+	public ObservableList<String> getYears(){
+        return yearComboBox.getItems();
+	}
 }
