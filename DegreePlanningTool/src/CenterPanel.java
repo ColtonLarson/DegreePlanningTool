@@ -42,9 +42,13 @@ public class CenterPanel extends Application{
 	private HBox bottom = new HBox();
 	private ArrayList<Label> quickProgress = new ArrayList<Label>();
 	private ArrayList<Course> searchDisplay = new ArrayList<Course>();
+	private ArrayList<Category> progressDisplay = new ArrayList<Category>();
 	private ArrayList<VBox> selectionableVBoxs = new ArrayList<VBox>();
+	private ArrayList<VBox> selectableCatVBoxs = new ArrayList<VBox>();
 	private VBox selected = new VBox();
+	private VBox selectedCat = new VBox();
 	private ArrayList<Category> copy;
+	private ArrayList<Category> catList;
 	
 	public CenterPanel(){
 		try {
@@ -128,6 +132,7 @@ public class CenterPanel extends Application{
 		
 		ObservableList<String> searchCategory = FXCollections.observableArrayList();
 		copy = new ArrayList<Category>(DataManager.getCategories());
+		copy.add(0, new Category("Any", -1, -1, ""));
 		for(int i = 0; i < copy.size(); i++){
             searchCategory.add(copy.get(i).getCategoryName());
 		}
@@ -189,6 +194,7 @@ public class CenterPanel extends Application{
 		searchDisplayPanes.setPrefSize(1200, 200);
 		searchDisplayPanes.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		searchDisplayPanes.autosize();
+		selectionableVBoxs.clear();
 		for(int i = 0; i < searchDisplay.size(); i++){
 			BorderPane bPane = new BorderPane();
 			bPane.setPrefSize(400, 100);
@@ -289,7 +295,8 @@ public class CenterPanel extends Application{
         topProgress.setSpacing(8);
         topProgress.setStyle("-fx-background-color: #696969;");
         topProgress.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        Label progressLabel = new Label("Progress Page");
+        Text progressLabel = new Text("Progress");
+        progressLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
         ComboBox<String> yearComboBox = new ComboBox<String>(DegreePlannerUI.getLeftPanel().getYears());
         Button search = new Button("  Search  ");
         search.setOnMouseClicked(e -> {
@@ -300,22 +307,88 @@ public class CenterPanel extends Application{
         topProgress.getChildren().addAll(progressLabel, yearComboBox, search);
         ScrollPane scrollProgress = new ScrollPane();
         VBox catProgress = new VBox();
-        ArrayList<Category> catList = new ArrayList<Category>(DataManager.getCategories());
+        catProgress.setPrefSize(1200, 200);
+        catList = new ArrayList<Category>(DataManager.getCategories());
+        selectableCatVBoxs.clear();
         for(int i = 0; i < catList.size(); i++){
             BorderPane bPane = new BorderPane();
 			bPane.setPrefSize(400, 100);
 			bPane.setBorder(new Border(new BorderStroke(Color.BLACK, 
 		            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-			//bPane.setTop();
-			//bPane.setCenter();
-			//searchDisplayPanes.getChildren().add(bPane);
+			bPane.setTop(getTopCategoryPane(i));
+			bPane.setCenter(getCenterCategoryPane(i));
+			bPane.setBottom(getBottomCategoryPane(i));
+			catProgress.getChildren().add(bPane);
         }
+        scrollProgress.setContent(catProgress);
         centerPanel.setTop(topProgress);
         centerPanel.setCenter(scrollProgress);
 	}
 	
-	private VBox getTopCategoryPane(){
-        return new VBox();
+	private VBox getTopCategoryPane(int i){
+        VBox catTop = new VBox(10);
+        selectableCatVBoxs.add(catTop);
+        catTop.setPrefSize(450, 50);
+        catTop.setSpacing(8);
+        catTop.setAlignment(Pos.CENTER_LEFT);
+        catTop.setPadding(new Insets(15));
+        catTop.setStyle("-fx-background-color: #afafaf;");
+        catTop.setOnMouseClicked(e -> {
+			if(!selectedCat.equals(catTop)){
+				selectedCat.setStyle("-fx-background-color: #afafaf;");
+				selectedCat = catTop;
+				selectedCat.setStyle("-fx-background-color: #b38808;");
+			}
+			//FIXME: overload updateInfoBox for categories
+			//DegreePlannerUI.getRightPanel().updateInfoBox(progressDisplay.get(i));
+		});
+        
+        Text catName = new Text(catList.get(i).getCategoryName());
+        catName.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
+        catTop.getChildren().addAll(catName);
+        return catTop;
+	}
+	
+	private HBox getCenterCategoryPane(int i){
+        HBox catCenter = new HBox(10);
+        catCenter.setOnMouseClicked(e -> {
+			//FIXME: overload updateInfoBox for categories
+			//DegreePlannerUI.getRightPanel().updateInfoBox(progressDisplay.get(i));
+			if(!selectedCat.equals(selectableCatVBoxs.get(i))){
+				selectedCat.setStyle("-fx-background-color: #afafaf;");
+				selectedCat = selectableCatVBoxs.get(i);
+				selectedCat.setStyle("-fx-background-color: #b38808;");
+			}
+		});
+        catCenter.setPrefSize(450, 50);
+        catCenter.setSpacing(8);
+        catCenter.setAlignment(Pos.CENTER_LEFT);
+        catCenter.setPadding(new Insets(15));
+        Text creditTitle = new Text("Completed Credits: ");
+        
+        catCenter.getChildren().addAll(creditTitle);
+        return catCenter;
+	}
+	
+	private HBox getBottomCategoryPane(int i){
+        HBox catBottom = new HBox(10);
+        catBottom.setOnMouseClicked(e -> {
+			//FIXME: overload updateInfoBox for categories
+			//DegreePlannerUI.getRightPanel().updateInfoBox(progressDisplay.get(i));
+			if(!selectedCat.equals(selectableCatVBoxs.get(i))){
+				selectedCat.setStyle("-fx-background-color: #afafaf;");
+				selectedCat = selectableCatVBoxs.get(i);
+				selectedCat.setStyle("-fx-background-color: #b38808;");
+			}
+		});
+        catBottom.setPrefSize(450, 50);
+        catBottom.setSpacing(8);
+        catBottom.setAlignment(Pos.CENTER_LEFT);
+        catBottom.setPadding(new Insets(15));
+        Text courseTitle = new Text("Completed Courses: ");
+        
+        catBottom.getChildren().addAll(courseTitle);
+        return catBottom;
 	}
 }
 
