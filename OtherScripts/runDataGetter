@@ -1,0 +1,2 @@
+#!/bin/bash
+perl getCategories.pl 2>&1 >~/public_html/courseData
