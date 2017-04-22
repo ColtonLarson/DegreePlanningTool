@@ -12,14 +12,44 @@ public class DataManager{
 
 	private static CourseManager courseManager;
 	private static CategoryManager categoryManager;
+	private static ProgressManager progressManager;
 	
 	public static void main(String[] args){
+		initData();
+	}
+
+	public DataManager(){
 		initData();
 	}
 	
 	public static void initData(){
 		courseManager = new CourseManager();
 		categoryManager = new CategoryManager();
+		progressManager = new ProgressManager();
+	}
+
+	public static void addYear(String year){
+		progressManager.add(year);
+	}
+
+	public static void addCourse(String year, String sem, Course course){
+		progressManager.insert(year,sem,course);
+	}
+
+	public static void deleteYear(String year){
+		progressManager.delete(year);
+	}
+
+	public static void deleteCourse(String year, String sem, String courseName){
+		progressManager.remove(year,sem,courseName);
+	}
+
+	public void save(){
+		progressManager.writeData();
+	}
+
+	public void load(){
+		progressManager.readData();
 	}
 	
 	public static Scanner openURL(String urlText){
@@ -34,6 +64,10 @@ public class DataManager{
 		}
 
 		return reader;
+	}
+
+	public static Course getCourseByName(String name){
+		return courseManager.getCourseByName(name);
 	}
 
 	public static Category getCategoryByID(int id){

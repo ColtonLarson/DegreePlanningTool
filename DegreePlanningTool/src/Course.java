@@ -46,6 +46,27 @@ public class Course{
 				  String courseID,
 				  String courseName,
 				  int credits,
+				  String description, int i)
+	{
+		this.category = category;
+		this.credits = credits;
+		this.courseID = courseID;
+		this.courseName = courseName;
+		this.creditLayout = "N/A";
+		this.description = description;
+		this.gradeMode = "N/A";
+		this.prerequisite = "N/A";
+		this.registrationInfo = "N/A";
+		this.restriction = "N/A";
+		this.alsoOfferedAs = "N/A";
+		this.courseFee = "N/A";
+		this.termOffered = "1";
+	}
+	
+	public Course(int category,
+				  String courseID,
+				  String courseName,
+				  int credits,
 				  String description)
 	{
 		this.category = category;
@@ -60,7 +81,7 @@ public class Course{
 		this.restriction = "N/A";
 		this.alsoOfferedAs = "N/A";
 		this.courseFee = "N/A";
-		this.termOffered = "N/A";
+		this.termOffered = "1";
 	}
 	
 	public Course(Course crs){
@@ -94,7 +115,14 @@ public class Course{
 	public String getTermOffered() 		{ return termOffered;}
 
 	public String toString(){
-		return courseID;
+		if(this.getTermOffered().equals("1")){
+			return "{" + this.category + "," 
+					   + this.courseID + "," 
+					   + this.courseName + "," 
+					   + this.credits + "," 
+                       + this.description + "}";
+		}
+		return "{" + this.courseID + "}";
 	}
 		
 }

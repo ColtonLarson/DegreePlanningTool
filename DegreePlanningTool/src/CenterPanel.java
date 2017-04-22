@@ -210,7 +210,7 @@ public class CenterPanel extends Application{
 	
 	//Add another param for parent
 	private VBox getTopCoursePane(int i){
-		Text name = new Text(searchDisplay.get(i).toString() + "\t" + searchDisplay.get(i).getCourseName());
+		Text name = new Text(searchDisplay.get(i).getCourseID() + "\t" + searchDisplay.get(i).getCourseName());
 		name.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
 		VBox panel = new VBox();
 		selectionableVBoxs.add(panel);

@@ -2,6 +2,9 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 
 public class DegreePlannerUI extends Application{
 	
@@ -23,6 +26,22 @@ public class DegreePlannerUI extends Application{
 		window.setTitle("CS Degree Planner");
 		//window.setMaximized(true);
 		
+		DataManager dm = new DataManager();
+
+		MenuBar menuBar = new MenuBar();
+
+		Menu fileMenu = new Menu("File");
+		MenuItem loadMenuItem = new MenuItem("Load");
+   		MenuItem saveMenuItem = new MenuItem("Save");
+    	loadMenuItem.setOnAction(actionEvent -> dm.load());
+		saveMenuItem.setOnAction(actionEvent -> dm.save());	
+	
+		fileMenu.getItems().addAll(loadMenuItem, saveMenuItem);
+
+		menuBar.getMenus().addAll(fileMenu);
+
+		borderPane.setTop(menuBar);
+
 		//LeftPanel Tests
 		leftPanel.addYear("2017-2018");
 		borderPane.setLeft(leftPanel.getPanel());

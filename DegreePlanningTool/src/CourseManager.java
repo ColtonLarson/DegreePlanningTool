@@ -9,6 +9,7 @@ public class CourseManager {
 	private static final String courseDataURL = "http://www.cs.colostate.edu/~pbivrell/courseData";
 	
 	public CourseManager(){
+		System.out.println("Construction CourseManager");
 		fillCourseList();
 	}
 	
@@ -35,6 +36,15 @@ public class CourseManager {
 						"","","","","","",""));
 		
 		return result;
+	}
+
+	public static Course getCourseByName(String name){
+		for(Course c : courseList){
+			if(c.getCourseID().equals(name)){
+				return c;
+			}
+		}
+		return null;
 	}
 	
 	public static ArrayList<Course> searchByTitle(String searchText, int category, int credits){
