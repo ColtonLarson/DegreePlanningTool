@@ -22,8 +22,12 @@ public class ProgressManager {
 
 	//Adds new Course to a specific Year and Semster
 	public void insert(String year,String sem,Course course){	
-		if(years.contains(new Progress(year))){	
-			for(Progress p : years){
+		if(!years.contains(new Progress(year))){
+            add(year);
+        }
+        if(years.contains(new Progress(year))){	
+			System.out.println("You probably didn't get here");
+            for(Progress p : years){
 				if(p.equals(year)){
 					p.insert(sem,course);
 				}
@@ -125,6 +129,8 @@ public class ProgressManager {
 
 	public void writeData(){
 		try{
+            System.out.println("Saving!!!!!");
+            System.out.println(this.toString());
 			PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
 			writer.write(this.toString());	
 			writer.close();

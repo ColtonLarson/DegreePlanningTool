@@ -73,11 +73,25 @@ public class LeftPanel extends Application {
 	}
 
 	public void addCourse(int year, int semester, Course course) throws IndexOutOfBoundsException {
-		if ((CourseData.size() < year || CourseData.isEmpty()) || (semester < 0 || semester > 2))
+		/*if ((CourseData.size() < year || CourseData.isEmpty()) || (semester < 0 || semester > 2))
 			throw new IndexOutOfBoundsException();
 		CourseData.get(year * 3 + semester).add(course);
 		// Update tables
-		updateTables(year);
+		updateTables(year);*/
+        
+            
+	    String yearCurrent = getYears().get(getSelectedYear());
+
+        String sem = "";
+        if(semester == 0){
+            sem = "fall";
+        }else if(semester == 1){
+            sem = "spring";
+        }else{
+            sem = "summer";
+        }        
+        System.out.println(sem);
+        DataManager.addCourse(yearCurrent,sem,course);
 	}
 
 	public Course removeCourse(int year, int semester, String name) throws IndexOutOfBoundsException {

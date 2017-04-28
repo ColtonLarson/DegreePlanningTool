@@ -33,8 +33,9 @@ public class DataManager{
 	}
 
 	public static void addCourse(String year, String sem, Course course){
-		progressManager.insert(year,sem,course);
-	}
+        System.out.println(year + " " + sem + " " + " " + course);
+        progressManager.insert(year,sem,course);
+    }
 
 	public static void deleteYear(String year){
 		progressManager.delete(year);
@@ -45,7 +46,8 @@ public class DataManager{
 	}
 
 	public void save(){
-		progressManager.writeData();
+	    System.out.println("Saving");
+        progressManager.writeData();
 	}
 
 	public void load(){
