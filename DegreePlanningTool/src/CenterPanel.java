@@ -253,10 +253,10 @@ public class CenterPanel extends Application{
 			if(searchDisplay.get(i).getCredits() == -1){
 				Course toAdd = new Course(AlertBox.makeCourse());
 				if(toAdd != null){
-                    DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(),0,toAdd);
+                    DegreePlannerUI.getLeftPanel().addCourse("fall",toAdd);
 				}
 			}else{
-				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 0, searchDisplay.get(i));
+				DegreePlannerUI.getLeftPanel().addCourse("fall", searchDisplay.get(i));
 			}
 		});
 		Button addSpring = new Button("Spring");
@@ -264,10 +264,10 @@ public class CenterPanel extends Application{
 			if(searchDisplay.get(i).getCredits() == -1){
 				Course toAdd = new Course(AlertBox.makeCourse());
 				if(toAdd != null){
-                    DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(),0,toAdd);
+                    DegreePlannerUI.getLeftPanel().addCourse("spring",toAdd);
 				}
 			}else{
-				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 1, searchDisplay.get(i));
+				DegreePlannerUI.getLeftPanel().addCourse("spring", searchDisplay.get(i));
 			}
 		});
 		Button addSummer = new Button("Summer");
@@ -275,10 +275,10 @@ public class CenterPanel extends Application{
 			if(searchDisplay.get(i).getCredits() == -1){
 				Course toAdd = new Course(AlertBox.makeCourse());
 				if(toAdd != null){
-                    DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(),0,toAdd);
+                    DegreePlannerUI.getLeftPanel().addCourse("summer",toAdd);
 				}
 			}else{
-				DegreePlannerUI.getLeftPanel().addCourse(DegreePlannerUI.getLeftPanel().getSelectedYear(), 2, searchDisplay.get(i));
+				DegreePlannerUI.getLeftPanel().addCourse("summer", searchDisplay.get(i));
 			}
 		});
 		pane.getChildren().addAll(addCourse, addFall, addSpring, addSummer);

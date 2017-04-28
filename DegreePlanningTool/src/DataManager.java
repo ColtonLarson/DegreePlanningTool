@@ -41,16 +41,20 @@ public class DataManager{
 		progressManager.delete(year);
 	}
 
-	public static void deleteCourse(String year, String sem, String courseName){
-		progressManager.remove(year,sem,courseName);
+	public static boolean deleteCourse(String year, String courseName){
+		return progressManager.remove(year,courseName);
 	}
 
-	public void save(){
+	public static void print(){
+		System.out.println(progressManager);
+	}
+
+	public static void save(){
 	    System.out.println("Saving");
         progressManager.writeData();
 	}
 
-	public void load(){
+	public static void load(){
 		progressManager.readData();
 	}
 	

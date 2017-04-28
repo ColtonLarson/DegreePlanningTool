@@ -29,14 +29,48 @@ public class Progress {
 		getSem(sem).add(course);
 	}
 	
-	public void remove(String sem, String courseName){
-		ArrayList<Course> semester = getSem(sem);
-		for(Course c : semester){
-			if(c.getCourseID().equals(courseName)){
-				semester.remove(c);
-				break;
+	public boolean remove(String courseName){
+		boolean found = false;
+		ArrayList<Course> removes = new ArrayList<Course>();
+		for(Course c : fall){
+			if(c.getCourseID().toLowerCase().equals(courseName.toLowerCase())){
+				removes.add(c);
+				found = true;
 			}
 		}
+
+		for(Course c : removes){
+			fall.remove(c);
+		}
+		
+		removes.clear();
+
+		for(Course c : spring){
+			if(c.getCourseID().toLowerCase().equals(courseName.toLowerCase())){
+				removes.add(c);
+				found = true;
+			}
+		}
+		
+		for(Course c : removes){
+			spring.remove(c);
+		}
+
+		removes.clear();
+		
+		for(Course c : summer){
+			if(c.getCourseID().toLowerCase().equals(courseName.toLowerCase())){
+				removes.add(c);
+				found = true;
+			}
+		}
+
+		for(Course c : removes){
+			summer.remove(c);
+		}
+
+		removes.clear();
+		return found;
 	}
 
 	private ArrayList<Course> getSem(String sem){

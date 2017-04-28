@@ -14,6 +14,10 @@ public class ProgressManager {
 	}
 
 
+	public List getYears(){
+		for(
+	}
+
 	//Adds new Year
 	public void add(String year){
 		//System.out.println("Adding: " + year);
@@ -41,16 +45,21 @@ public class ProgressManager {
 		years.remove(new Progress(year));
 	}
 	
-	//Removes a course from a specific Year and Semester
-	public void remove(String year,String sem,String courseName){
+	//Removes all instances of a course from a specific Year
+	public boolean remove(String year,String courseName){
+		boolean found = false;
+
+		System.out.println("Removing: " + year + " " + courseName);		
+		
 		if(years.contains(new Progress(year))){
 			for(Progress p : years){
 				if(p.equals(year)){
-					p.remove(sem,courseName);
-					break;
+					found = p.remove(courseName);
+					
 				}
 			}
 		}
+		return found;
 	}
 
 	public void readData(){
@@ -158,7 +167,7 @@ public class ProgressManager {
 		m.insert("2015-2016","spring",new Course(1,"CS400","Data Strucutures",1,""));
 		m.insert("2015-2016","summer",new Course(1,"CS500","Data Strucutures",1,""));
 		System.out.println(m);
-		m.remove("2015-2016","summer","CS500");
+		m.remove("2015-2016","CS500");
 		System.out.println(m);
 		m.writeData();
 		System.out.println("TEST");

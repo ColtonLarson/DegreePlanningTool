@@ -33,6 +33,8 @@ public class CategoryManager{
         return 0;
     }
 
+	
+
 	//The following Methods are data mutators
 	private static void initCategory(){
 		Scanner reader = null;  

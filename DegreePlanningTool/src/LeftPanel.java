@@ -72,37 +72,8 @@ public class LeftPanel extends Application {
 		return borderPane;
 	}
 
-	public void addCourse(int year, int semester, Course course) throws IndexOutOfBoundsException {
-		/*if ((CourseData.size() < year || CourseData.isEmpty()) || (semester < 0 || semester > 2))
-			throw new IndexOutOfBoundsException();
-		CourseData.get(year * 3 + semester).add(course);
-		// Update tables
-		updateTables(year);*/
-        
-            
-	    String yearCurrent = getYears().get(getSelectedYear());
-
-        String sem = "";
-        if(semester == 0){
-            sem = "fall";
-        }else if(semester == 1){
-            sem = "spring";
-        }else{
-            sem = "summer";
-        }        
-        System.out.println(sem);
-        DataManager.addCourse(yearCurrent,sem,course);
-	}
-
-	public Course removeCourse(int year, int semester, String name) throws IndexOutOfBoundsException {
-		if ((CourseData.size() < year || CourseData.isEmpty()) || (semester < 0 || semester > 2))
-			throw new IndexOutOfBoundsException();
-		for (int i = 0; i < CourseData.get(year * 3 + semester).size(); ++i) {
-			if (CourseData.get(year * 3 + semester).get(i).getCourseName().equals(name)) {
-				return CourseData.get(year * 3 + semester).remove(i);
-			}
-		}
-		return null;
+	public void addCourse(String sem, Course course) throws IndexOutOfBoundsException {
+        DataManager.addCourse(currentYear(),sem,course);
 	}
 
 	private void setPanel() {
@@ -135,8 +106,7 @@ public class LeftPanel extends Application {
 		courseTextField.setPromptText("Ex: BZ110");
 		Button removeCourseButton = new Button("Remove Course");
 		removeCourseButton.setOnMouseClicked(e -> {
-			removeCourse(courseTextField.getText(),
-					yearComboBox.getSelectionModel().selectedIndexProperty().getValue());
+			removeCourse(courseTextField.getText());
 		});
 		bottom.getChildren().addAll(courseTextField, removeCourseButton);
 		for (int i = 0; i < 3; i++) {
@@ -186,7 +156,7 @@ public class LeftPanel extends Application {
 	}
 
 	public void addYear(String year) {
-		boolean goodYear = true;
+		/*boolean goodYear = true;
 		for(int i = 0; i < year.length(); i++){
 			if(i != 4 && !Character.isDigit(year.charAt(i))){
 				AlertBox.display("Add Year", "The year format is: 'XXXX-XXXX'.");
@@ -209,7 +179,17 @@ public class LeftPanel extends Application {
 				CourseData.add(courses);
 			}
 			yearComboBox.getSelectionModel().selectLast();
+		}*/
+
+		if(!validYear(year)){
+			AlertBox.display("Add Year", "The year format is: 'XXXX-XXXX'");
 		}
+
+		yearComboBox.setItems
+	}
+
+	private boolean validYear(String year){
+		return year.matches("^\\d{4}-\\d{4}$");
 	}
 
 	private void removeYear(String year) {
@@ -243,27 +223,25 @@ public class LeftPanel extends Application {
 		}
 	}
 
-	private void removeCourse(String course, int year) {
+	private void removeCourse(String course) {
 		boolean found = false;
 		if (course.equals("")) {
 			AlertBox.display("Remove Course", "The course format to remove is: 'BZ110'.");
 		}
-		else{
-			for (int i = year * 3; i < ((year * 3) + 3); i++) {
-				for (int j = 0; j < CourseData.get(i).size(); j++) {
-					if (CourseData.get(i).get(j).getCourseID().equals(course)) {
-						CourseData.get(i).remove(j);
-						found = true;
-					}
-				}
-			}
-			if(found)
-				updateTables(year);
-			else
-				AlertBox.display("Remove Course", "The course '" + course + "' was not found in selected year.");
+	    
+        found = DataManager.deleteCourse(currentYear(),course);
+
+		if(found){
+			//updateTables(yearCurrent);
+		}else{
+			AlertBox.display("Remove Course", "The course '" + course + "' was not found in selected year.");
 		}
 	}
 	
+	private String currentYear(){
+		return getYears().get(getSelectedYear());
+	}
+
 	public int getSelectedYear(){
 		return yearComboBox.getSelectionModel().getSelectedIndex();
 	}
