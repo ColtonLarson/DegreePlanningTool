@@ -18,6 +18,7 @@ public class Progress {
 		return year;
 	}
 
+
 	public Progress(String sem, Course course){
 		fall = new ArrayList<Course>();
 		spring = new ArrayList<Course>();
@@ -73,7 +74,7 @@ public class Progress {
 		return found;
 	}
 
-	private ArrayList<Course> getSem(String sem){
+	public ArrayList<Course> getSem(String sem){
 		if(sem.equals("fall")){
 			return this.fall;
 		}else if(sem.equals("spring")){

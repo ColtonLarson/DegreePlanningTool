@@ -19,7 +19,8 @@ public class DataManager{
 	}
 
 	public DataManager(){
-		initData();
+		System.out.println("Constrution Data Manager");
+        initData();
 	}
 	
 	public static void initData(){
@@ -31,6 +32,14 @@ public class DataManager{
 	public static void addYear(String year){
 		progressManager.add(year);
 	}
+    
+    public static ArrayList<Course> getSem(String year, String sem){
+        return progressManager.getSem(year,sem);
+    }
+
+    public static ArrayList getYears(){
+        return progressManager.getYears();
+    }
 
 	public static void addCourse(String year, String sem, Course course){
         System.out.println(year + " " + sem + " " + " " + course);

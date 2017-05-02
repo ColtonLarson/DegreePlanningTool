@@ -22,11 +22,11 @@ public class DegreePlannerUI extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		DataManager dm = new DataManager();
 		window = primaryStage;
 		window.setTitle("CS Degree Planner");
 		//window.setMaximized(true);
 		
-		DataManager dm = new DataManager();
 
 		MenuBar menuBar = new MenuBar();
 
@@ -43,7 +43,7 @@ public class DegreePlannerUI extends Application{
 		borderPane.setTop(menuBar);
 
 		//LeftPanel Tests
-		leftPanel.addYear("2017-2018");
+	//	leftPanel.addYear("2017-2018");
 		borderPane.setLeft(leftPanel.getPanel());
 		
 		//RightPanel Tests		

@@ -3,6 +3,7 @@ import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import javafx.collections.ObservableList;
 
 public class ProgressManager {
 	
@@ -14,8 +15,21 @@ public class ProgressManager {
 	}
 
 
-	public List getYears(){
-		for(
+    public ArrayList<Course> getSem(String year, String sem){
+        for(Progress p : years){
+            if(p.equals(year)){
+                return p.getSem(sem);
+            } 
+        }
+        return null;
+    }
+
+	public ArrayList<String> getYears(){
+		ArrayList<String> yearList = new ArrayList<String>();
+        for(Progress p : years){
+            yearList.add(p.getYear());
+        }
+        return yearList;
 	}
 
 	//Adds new Year
@@ -30,7 +44,6 @@ public class ProgressManager {
             add(year);
         }
         if(years.contains(new Progress(year))){	
-			System.out.println("You probably didn't get here");
             for(Progress p : years){
 				if(p.equals(year)){
 					p.insert(sem,course);
