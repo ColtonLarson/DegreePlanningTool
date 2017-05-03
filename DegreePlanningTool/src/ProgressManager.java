@@ -8,14 +8,18 @@ import javafx.collections.ObservableList;
 public class ProgressManager {
 	
 
-	private TreeSet<Progress> years;
+	private static TreeSet<Progress> years;
 
 	public ProgressManager(){
      	years = new TreeSet<Progress>(new ProgressComp());
 	}
 
 
-    public ArrayList<Course> getSem(String year, String sem){
+	public static boolean isEmpty(){
+		return years.isEmpty();
+	}
+
+    public static ArrayList<Course> getSem(String year, String sem){
         for(Progress p : years){
             if(p.equals(year)){
                 return p.getSem(sem);
@@ -24,7 +28,7 @@ public class ProgressManager {
         return null;
     }
 
-	public ArrayList<String> getYears(){
+	public static ArrayList<String> getYears(){
 		ArrayList<String> yearList = new ArrayList<String>();
         for(Progress p : years){
             yearList.add(p.getYear());
@@ -33,33 +37,32 @@ public class ProgressManager {
 	}
 
 	//Adds new Year
-	public void add(String year){
+	public static void add(String year){
 		//System.out.println("Adding: " + year);
 		years.add(new Progress(year));
 	}
 
 	//Adds new Course to a specific Year and Semster
-	public void insert(String year,String sem,Course course){	
-		if(!years.contains(new Progress(year))){
+	public static void insert(String year,String sem,Course course){	
+		if(!years.contains(new Progress(year)))
             add(year);
-        }
-        if(years.contains(new Progress(year))){	
-            for(Progress p : years){
-				if(p.equals(year)){
-					p.insert(sem,course);
-				}
+       
+		for(Progress p : years){
+			if(p.equals(year)){
+				p.insert(sem,course);
+				System.out.println("Inserting: " + year + " " + sem + " " + course);
 			}
 		}
 	}
 
 
 	//Removes a year
-	public void delete(String year){
+	public static void delete(String year){
 		years.remove(new Progress(year));
 	}
 	
 	//Removes all instances of a course from a specific Year
-	public boolean remove(String year,String courseName){
+	public static boolean remove(String year,String courseName){
 		boolean found = false;
 
 		System.out.println("Removing: " + year + " " + courseName);		
@@ -75,40 +78,52 @@ public class ProgressManager {
 		return found;
 	}
 
-	public void readData(){
-	
+	public static void readData(File filename){
+		//We are here now
+		System.out.println("We are here now");
+		TreeSet<Progress> save = new TreeSet<Progress>(years);
+
+
 		years.clear();
 		Scanner s = null;
 		try{
-			s = new Scanner(new File("the-file-name.txt"));
-		}catch(FileNotFoundException e){}
+			s = new Scanner(filename);
+		}catch(FileNotFoundException e){
+			AlertBox.display("File Error", "File could not be opened:\n" + e);
+		}
 			
 		while(s.hasNext()){
+			try{
 			String year = s.nextLine();
 			readYear(year);
 			readSemester(s.nextLine(),year);
 			readSemester(s.nextLine(),year);
 			readSemester(s.nextLine(),year);
+			}catch(Exception e){
+				AlertBox.display("Read File", "Input file was invalid");
+				years = save;
+				return;
+			}
 		}
 	}
 
-	private void readYear(String year){
-		this.add(year);
+	private static void readYear(String year){
+		add(year);
 	}	
 
-	private void readSemester(String sem, String year){
+	private static void readSemester(String sem, String year){
 		String semster = sem.split(":")[0];
 		String data = sem.split(":")[1];
 		
 		Course[] course = tokenize(data);
-		
+
 		for(Course c : course){
-			this.insert(year,semster,c);	
-		//	System.out.println("Creating Course: " + year + " - " + sem + " - " + c);
+			insert(year,semster,c);	
+			System.out.println("Creating Course: " + year + " - " + sem + " - " + c);
 		}		
 	}
 
-	private Course[] tokenize(String data){
+	private static Course[] tokenize(String data){
 		//System.out.println("Tokenizing: " + data);
 		int count = 0;
 		for(char c : data.toCharArray()){
@@ -149,19 +164,17 @@ public class ProgressManager {
 	}
 
 
-	public void writeData(){
+	public static void writeData(File filename){
 		try{
-            System.out.println("Saving!!!!!");
-            System.out.println(this.toString());
-			PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
-			writer.write(this.toString());	
+			PrintWriter writer = new PrintWriter(filename, "UTF-8");
+			writer.write(printer());	
 			writer.close();
 		} catch (IOException e) {
-  			// do something
+			AlertBox.display("Write Error", "Could not write to file: \n" + e);
 		}
 	}
 
-	public String toString(){
+	public static String printer(){
 		String out = "";
 		for(Progress p : years){
 			out += p;
@@ -170,23 +183,6 @@ public class ProgressManager {
 	}
 
 	public static void main(String[] args){
-		ProgressManager m = new ProgressManager();
-		m.add("2013-2014");
-		m.add("2015-2016");
-		m.add("2016-2017");
-		m.insert("2013-2014","spring",new Course(1,"CS200","Data Strucutures",1,"","","","","","","","",""));
-		m.insert("2013-2014","spring",new Course(1,"CS300","Data Strucutures",1,""));
-		m.insert("2015-2016","fall",new Course(1,"CS400","Data Strucutures",1,""));
-		m.insert("2015-2016","spring",new Course(1,"CS400","Data Strucutures",1,""));
-		m.insert("2015-2016","summer",new Course(1,"CS500","Data Strucutures",1,""));
-		System.out.println(m);
-		m.remove("2015-2016","CS500");
-		System.out.println(m);
-		m.writeData();
-		System.out.println("TEST");
-		m.readData();
-		System.out.println("TEST2");
-		System.out.println(m);
 		
 	}
 

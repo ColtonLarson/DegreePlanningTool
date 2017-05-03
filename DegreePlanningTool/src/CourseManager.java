@@ -9,7 +9,6 @@ public class CourseManager {
 	private static final String courseDataURL = "http://www.cs.colostate.edu/~pbivrell/courseData";
 	
 	public CourseManager(){
-		System.out.println("Construction CourseManager");
 		fillCourseList();
 	}
 	

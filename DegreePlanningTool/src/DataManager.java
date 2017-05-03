@@ -13,17 +13,22 @@ public class DataManager{
 	private static CourseManager courseManager;
 	private static CategoryManager categoryManager;
 	private static ProgressManager progressManager;
-	
+	private static boolean started = false;	
+
 	public static void main(String[] args){
 		initData();
 	}
 
 	public DataManager(){
-		System.out.println("Constrution Data Manager");
-        initData();
+		if(!started){
+			initData();
+			started = true;
+		}
+		
 	}
 	
 	public static void initData(){
+		System.out.println("Inializing Data");
 		courseManager = new CourseManager();
 		categoryManager = new CategoryManager();
 		progressManager = new ProgressManager();
@@ -54,17 +59,20 @@ public class DataManager{
 		return progressManager.remove(year,courseName);
 	}
 
+	public static boolean isYearsEmpty(){
+		return progressManager.isEmpty();
+	}
+
 	public static void print(){
-		System.out.println(progressManager);
+		System.out.println(progressManager.printer());
 	}
 
-	public static void save(){
-	    System.out.println("Saving");
-        progressManager.writeData();
+	public static void save(File filename){
+        progressManager.writeData(filename);
 	}
 
-	public static void load(){
-		progressManager.readData();
+	public static void load(File filename){
+		progressManager.readData(filename);
 	}
 	
 	public static Scanner openURL(String urlText){

@@ -55,15 +55,17 @@ public class LeftPanel extends Application {
 		borderPane.setCenter(scrollPane);
 		borderPane.setMaxSize(450, Double.MAX_VALUE);
 
-		LocalDateTime now = LocalDateTime.now();
-		String year = Integer.toString(now.getYear() - 1) + "-" + Integer.toString(now.getYear());// default
+		//LocalDateTime now = LocalDateTime.now();
+		//String year = Integer.toString(now.getYear() - 1) + "-" + Integer.toString(now.getYear());// default
 	    
-        DataManager dm = new DataManager();
-
             // year
-		addYear(year);
-		setTables(year);
+		//addYear(year);
+		setTables();
 		setPanel();
+		yearComboBox.setDisable(true);
+		//updateTables();
+		
+		
 	}
 
 	@Override
@@ -76,7 +78,11 @@ public class LeftPanel extends Application {
 	}
 
 	public void addCourse(String sem, Course course) throws IndexOutOfBoundsException {
-        DataManager.addCourse(currentYear(),sem,course);
+        if(currentYear() == null){
+			AlertBox.display("Add Year", "You must add a year first!");
+			return;
+		}
+		DataManager.addCourse(currentYear(),sem,course);
 	    updateTables();
     }
 
@@ -99,11 +105,12 @@ public class LeftPanel extends Application {
 		Button removeButton = new Button("Remove Year");
 		addYearButton.setOnMouseClicked(e -> {
 			addYear(yearTextField.getText());
+			updateTables();
 		});
 		removeButton.setOnMouseClicked(e -> {
-			removeYear(yearTextField.getText());
+			removeYear(yearTextField.getText(),yearTextField);
 		});
-		yearTextField.setPromptText("XXXX-XXXX");
+		yearTextField.setPromptText("####-####");
 		yearTextField.setMaxSize(100, 10);
 		top.getChildren().addAll(yearComboBox, yearTextField, addYearButton, removeButton);
 		TextField courseTextField = new TextField();
@@ -121,7 +128,7 @@ public class LeftPanel extends Application {
 		}
 	}
 
-	private void setTables(String year) {
+	private void setTables() {
 		for (int i = 0; i < 3; i++) {
 			TableView<Course> table = new TableView<Course>();
 			table.getSelectionModel().selectedIndexProperty()
@@ -141,29 +148,14 @@ public class LeftPanel extends Application {
 			creditCol.setCellValueFactory(new PropertyValueFactory<Course, String>("credits"));
 			table.getColumns().addAll(classCol, creditCol);
                 
-            ObservableList<Course> classes = FXCollections.observableArrayList();
-			if(i == 0){
-			    Collections.copy(classes, DataManager.getSem(year,"fall"));
-            }else if(i == 1){
-                Collections.copy(classes, DataManager.getSem(year,"spring"));
-            }else{       
-                Collections.copy(classes, DataManager.getSem(year,"summer"));
-            }
-			table.setItems(classes);
 			tables.add(table);
 		}
 	}
 
-	private void updateTables() {
-		/*for (int i = 0; i < 3; i++) {
-			ObservableList<Course> classes = FXCollections.observableArrayList(CourseData.get(year * 3 + i));
-			int total = 0;
-			for (int j = 0; j < CourseData.get(year * 3 + i).size(); j++) {
-				total += CourseData.get(year * 3 + i).get(j).getCredits();
-			}
-			tables.get(i).getColumns().get(1).textProperty().set("Credit(" + total + ")");
-			tables.get(i).setItems(classes);
-		}*/
+	public void updateTables() {
+		if(currentYear() == null){
+			return;
+		}
         String year = currentYear();
         ArrayList<Course> fall = DataManager.getSem(year,"fall");
         ArrayList<Course> spring = DataManager.getSem(year,"spring");
@@ -172,6 +164,10 @@ public class LeftPanel extends Application {
         updateTable(fall,0);
         updateTable(spring,1);
         updateTable(summer,2);
+        
+		if(!DataManager.isYearsEmpty()){
+			yearComboBox.setDisable(false);
+		}
         
 	}
 
@@ -182,45 +178,29 @@ public class LeftPanel extends Application {
         for(Course c : sem){
             total += c.getCredits();
         }
-		tables.get(i).getColumns().get(1).textProperty().set("Credit(" + total + ")");
+		tables.get(i).getColumns().get(1).textProperty().set("Credits (" + total + ")");
 		tables.get(i).setItems(classes);
     }
 
 	public void addYear(String year) {
-		/*boolean goodYear = true;
-		for(int i = 0; i < year.length(); i++){
-			if(i != 4 && !Character.isDigit(year.charAt(i))){
-				AlertBox.display("Add Year", "The year format is: 'XXXX-XXXX'.");
-				goodYear = false;
-			}
-			else if(i == 4 && year.charAt(i) != '-'){
-				AlertBox.display("Add Year", "The year format is: 'XXXX-XXXX'.");
-				goodYear = false;
-			}
-		}
-			
-		if (year.equals("")) {
-			AlertBox.display("Add Year", "The year format is: 'XXXX-XXXX'.");
-		}
-		else if(goodYear){
-			yearComboBox.getItems().add(year);
-			yearComboBox.setPromptText(year);
-			for (int i = 0; i < 3; i++) {
-				ObservableList<Course> courses = FXCollections.observableArrayList();
-				CourseData.add(courses);
-			}
-			yearComboBox.getSelectionModel().selectLast();
-		}*/
-
+		System.out.println("Adding Year: " + year);
+		System.out.println("Printing Data: ");
+		DataManager.print();	
 		if(!validYear(year)){
 			AlertBox.display("Add Year", "The year format is: 'XXXX-XXXX'");
 		    return;
         }
+		yearComboBox.setDisable(false);
 
         DataManager.addYear(year);
         ObservableList<String> list = FXCollections.observableArrayList(DataManager.getYears());
 		yearComboBox.setItems(list);
-        yearComboBox.setPromptText(year);
+		yearComboBox.getSelectionModel().selectLast();
+	}
+
+	public void initYear(){
+        ObservableList<String> list = FXCollections.observableArrayList(DataManager.getYears());
+		yearComboBox.setItems(list);
 		yearComboBox.getSelectionModel().selectLast();
 	}
 
@@ -228,38 +208,15 @@ public class LeftPanel extends Application {
 		return year.matches("^\\d{4}-\\d{4}$");
 	}
 
-	private void removeYear(String year) {
-		/*boolean goodYear = true;
-		for(int i = 0; i < year.length(); i++){
-			if(i != 4 && !Character.isDigit(year.charAt(i))){
-				AlertBox.display("Remove Year", "The year format is: 'XXXX-XXXX'.");
-				goodYear = false;
+	private void removeYear(String year, TextField ytf) {
+        if(year.equals("")){
+			if(currentYear() == null){
+				return;
 			}
-			else if(i == 4 && year.charAt(i) != '-'){
-				AlertBox.display("Remove Year", "The year format is: 'XXXX-XXXX'.");
-				goodYear = false;
-			}
-		}
-		if(year.equals("")){
-			AlertBox.display("Remove Year", "The year format is: 'XXXX-XXXX'.");
-		}
-		else if (yearComboBox.getItems().size() > 1) {
-			for (int i = 0; i < yearComboBox.getItems().size(); i++) {
-				if (yearComboBox.getItems().get(i).equals(year)) {
-					yearComboBox.getItems().remove(i);
-					for (int j = 0; j < 3; j++) {
-						CourseData.remove(i * 3);
-					}
-				}
-
-			}
-		}
-		else{
-			AlertBox.display("Remove Year", "You must have at least one year.");
-		}*/
-
-        if(!validYear(year)){
-			AlertBox.display("Remove Year", "You must have at least one year.");
+			ytf.setText(currentYear());
+			return;
+		}else if(!validYear(year)){
+			AlertBox.display("Remove Year", "Invalid year formatt should be ####-####\n");
             return;
         }
 
@@ -267,7 +224,11 @@ public class LeftPanel extends Application {
             if (yearComboBox.getItems().get(i).equals(year))
                 yearComboBox.getItems().remove(i);
         DataManager.deleteYear(year);
-        updateTables();
+        if(DataManager.isYearsEmpty()){
+			yearComboBox.setDisable(true);
+		}
+		ytf.setText("");
+		updateTables();
     }
 
 	private void removeCourse(String course) {
@@ -276,6 +237,10 @@ public class LeftPanel extends Application {
 			AlertBox.display("Remove Course", "The course format to remove is: 'BZ110'.");
 		}
 	    
+		if(currentYear() == null){
+			AlertBox.display("Add Year", "You must add a year first!");
+			return;
+		}
         found = DataManager.deleteCourse(currentYear(),course);
 
 		if(found){
@@ -286,6 +251,12 @@ public class LeftPanel extends Application {
 	}
 	
 	private String currentYear(){
+		try{
+			getYears().get(getSelectedYear());
+		}catch(Exception e){
+			return null;
+		}
+		
 		return getYears().get(getSelectedYear());
 	}
 
@@ -294,7 +265,6 @@ public class LeftPanel extends Application {
 	}
 	
 	public ObservableList<String> getYears(){
-        System.out.println(yearComboBox.getItems());
         return yearComboBox.getItems();
 	}
 }
