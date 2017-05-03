@@ -1,0 +1,16 @@
+2015-2016
+fall:[{PHIL110}, {MATH124}, {MATH126}, {CS192}, {CS160}, {BZ110}, {BZ111}, {4,LSPA100,Spanish,3,Ap credits taken in high school [This was course built by the user]}]
+spring:[{PSY152}, {CS161}, {CS155}, {CS156}, {CS157}, {CO150}]
+summer:[{MATH160}]
+2016-2017
+fall:[{CS200}, {CS270}, {GEOL120}, {GEOL121}, {MATH161}]
+spring:[{CS370}, {MATH369}, {AGRI116}, {CS253}, {HIST151}]
+summer:[{CS430}, {3,CHEM101,Introduction to Chemistry,5,Chem class taken at front range [This was course built by the user]}]
+2017-2018
+fall:[{CS475}, {STAT301}, {CS314}, {MU100}, {JTC300}]
+spring:[{MATH366}, {CS320}, {CS453}, {CS455}]
+summer:[]
+2018-2019
+fall:[{CS440}, {CS420}, {CS457}, {CS356}, {MATH360}]
+spring:[]
+summer:[]
