@@ -14,6 +14,27 @@ public class Progress {
 		this.year = year;
 	}
 
+	public int countCredits(Category c){
+		int count = 0;
+		for(Course course : fall){
+			if(c.getCategoryID() == course.getCategory()){
+				count += course.getCredits();
+			}
+		}
+		for(Course course : spring){
+			if(c.getCategoryID() == course.getCategory()){
+				count += course.getCredits();
+			}	
+		}
+	
+		for(Course course : summer){
+			if(c.getCategoryID() == course.getCategory()){
+				count += course.getCredits(); 
+			}
+		}
+		return count;
+	}
+
 	public String getYear(){
 		return year;
 	}

@@ -14,6 +14,15 @@ public class ProgressManager {
      	years = new TreeSet<Progress>(new ProgressComp());
 	}
 
+	public static int getCategoryCredits(Category c, String year){
+		for(Progress p : years){
+			if(p.getYear().equals(year)){
+				return p.countCredits(c);
+			}
+		}
+		return 0;
+	}
+
 
 	public static boolean isEmpty(){
 		return years.isEmpty();

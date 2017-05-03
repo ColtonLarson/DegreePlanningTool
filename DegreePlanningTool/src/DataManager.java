@@ -26,6 +26,15 @@ public class DataManager{
 		}
 		
 	}
+
+	public static int getCategoryCredits(Category c, String year){
+		return 0;
+	}
+
+	public static ArrayList<Course> getCategoryClassesTaken(Category c, String year){
+		return null;
+	}
+	
 	
 	public static void initData(){
 		System.out.println("Inializing Data");
