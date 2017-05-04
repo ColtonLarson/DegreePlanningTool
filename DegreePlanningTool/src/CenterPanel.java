@@ -297,7 +297,7 @@ public class CenterPanel extends Application{
         Text progressLabel = new Text("Progress");
         progressLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
         //FIXME:
-        yearComboBox = new ComboBox<String>(DegreePlannerUI.getLeftPanel().getYears());
+        yearComboBox = new ComboBox<String>(FXCollections.observableArrayList(DataManager.getYears()));
         Button search = new Button("  Search  ");
         search.setOnMouseClicked(e -> {
             centerPanel.setTop(top);
@@ -324,7 +324,7 @@ public class CenterPanel extends Application{
         centerPanel.setTop(topProgress);
         centerPanel.setCenter(scrollProgress);
 	}
-	
+
 	private VBox getTopCategoryPane(int i){
         VBox catTop = new VBox(10);
         selectableCatVBoxs.add(catTop);
@@ -364,7 +364,7 @@ public class CenterPanel extends Application{
         catCenter.setSpacing(8);
         catCenter.setAlignment(Pos.CENTER_LEFT);
         catCenter.setPadding(new Insets(15));
-        Text creditTitle = new Text("Completed Credits: " + ProgressManager.getCategoryCredits(catList.get(i), yearComboBox.getSelectionModel().selectedIndexProperty().getValue().toString()) + "/" + catList.get(i).getCreditsRequired());
+        Text creditTitle = new Text("Completed Credits: " + DataManager.getCategoryCredits(catList.get(i), yearComboBox.getSelectionModel().selectedIndexProperty().getValue().toString()) + "/" + catList.get(i).getCreditsRequired());
         
         catCenter.getChildren().addAll(creditTitle);
         return catCenter;

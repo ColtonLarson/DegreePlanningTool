@@ -17,6 +17,7 @@ public class ProgressManager {
 	public static int getCategoryCredits(Category c, String year){
 	    int total = 0;
         for(Progress p : years){
+            System.out.println("Year: " + year + "Total: " + total);
             total += p.countCredits(c);
             if(p.getYear().equals(year)){
 			    return total;
