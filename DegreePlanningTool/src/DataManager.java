@@ -28,11 +28,11 @@ public class DataManager{
 	}
 
 	public static int getCategoryCredits(Category c, String year){
-		return 0;
+		return progressManager.getCategoryCredits(c,year);
 	}
 
 	public static ArrayList<Course> getCategoryClassesTaken(Category c, String year){
-		return null;
+		return progressManager.getCategoryClassesTaken(c,year);
 	}
 	
 	

@@ -15,13 +15,28 @@ public class ProgressManager {
 	}
 
 	public static int getCategoryCredits(Category c, String year){
-		for(Progress p : years){
-			if(p.getYear().equals(year)){
-				return p.countCredits(c);
-			}
+	    int total = 0;
+        for(Progress p : years){
+            total += p.countCredits(c);
+            if(p.getYear().equals(year)){
+			    return total;
+            }
 		}
 		return 0;
 	}
+
+    public static ArrayList<Course> getCategoryClassesTaken(Category c, String year){
+        ArrayList<Course> list = new ArrayList<Course>();
+        for(Progress p : years){
+           for(Course co : p.getClasses(c)){
+                list.add(co);
+           } 
+           if(p.getYear().equals(year)){
+                return list;   
+           }
+        }
+        return list;
+    }
 
 
 	public static boolean isEmpty(){

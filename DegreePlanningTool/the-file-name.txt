@@ -1,0 +1,8 @@
+2015-2016
+fall:[]
+spring:[]
+summer:[]
+2016-2017
+fall:[{STAA551}]
+spring:[{STAA552}]
+summer:[{STAA575}, {STAA574}, {STAA573}]

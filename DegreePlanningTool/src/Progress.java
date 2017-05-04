@@ -35,6 +35,26 @@ public class Progress {
 		return count;
 	}
 
+    public ArrayList<Course> getClasses(Category c){
+        ArrayList<Course> list = new ArrayList<Course>();
+        for(Course course : fall){
+            if(c.getCategoryID() == course.getCategory()){
+                list.add(course);     
+            }
+        }
+        for(Course course : spring){
+            if(c.getCategoryID() == course.getCategory()){
+                list.add(course);     
+            }
+        }
+        for(Course course : summer){
+            if(c.getCategoryID() == course.getCategory()){
+                list.add(course);     
+            }
+        }
+        return list;
+    }
+
 	public String getYear(){
 		return year;
 	}
