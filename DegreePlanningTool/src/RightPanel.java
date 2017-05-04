@@ -76,4 +76,11 @@ public class RightPanel extends Application{
 		restrictions.setWrappingWidth(400);
 		restrictions.setText("Restrictions: " + (course.getRestriction().isEmpty() ? "None" : course.getRestriction()));
 	}
+	
+	public void updateInfoBox(Category category){
+        title.setWrapText(true);
+        title.setText(category.getCategoryName() + " Information");
+        information.setWrappingWidth(400);
+        information.setText("Description: \n" + "\t" + (category.getDescription().isEmpty() ? "None" : category.getDescription()) + "\n");
+	}
 }
