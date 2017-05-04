@@ -49,6 +49,7 @@ public class CenterPanel extends Application{
 	private VBox selectedCat = new VBox();
 	private ArrayList<Category> copy;
 	private ArrayList<Category> catList;
+	private ComboBox<String> yearComboBox;
 	
 	public CenterPanel(){
 		try {
@@ -208,7 +209,6 @@ public class CenterPanel extends Application{
 		
 	}
 	
-	//Add another param for parent
 	private VBox getTopCoursePane(int i){
 		Text name = new Text(searchDisplay.get(i).getCourseID() + "\t" + searchDisplay.get(i).getCourseName());
 		name.setFont(Font.font("Verdana", FontWeight.NORMAL, 14));
@@ -232,7 +232,6 @@ public class CenterPanel extends Application{
 		return panel;
 	}
 	
-	//Add another param for parent
 	private HBox getBottomCoursePane(int i){
 		HBox pane = new HBox(10);
 		pane.setPrefSize(450,25);
@@ -297,7 +296,8 @@ public class CenterPanel extends Application{
         topProgress.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         Text progressLabel = new Text("Progress");
         progressLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
-        ComboBox<String> yearComboBox = new ComboBox<String>(DegreePlannerUI.getLeftPanel().getYears());
+        //FIXME:
+        yearComboBox = new ComboBox<String>(DegreePlannerUI.getLeftPanel().getYears());
         Button search = new Button("  Search  ");
         search.setOnMouseClicked(e -> {
             centerPanel.setTop(top);
@@ -334,6 +334,7 @@ public class CenterPanel extends Application{
         catTop.setPadding(new Insets(15));
         catTop.setStyle("-fx-background-color: #afafaf;");
         catTop.setOnMouseClicked(e -> {
+            DegreePlannerUI.getRightPanel().updateInfoBox(catList.get(i));
 			if(!selectedCat.equals(catTop)){
 				selectedCat.setStyle("-fx-background-color: #afafaf;");
 				selectedCat = catTop;
@@ -352,8 +353,7 @@ public class CenterPanel extends Application{
 	private HBox getCenterCategoryPane(int i){
         HBox catCenter = new HBox(10);
         catCenter.setOnMouseClicked(e -> {
-			//FIXME: overload updateInfoBox for categories
-			//DegreePlannerUI.getRightPanel().updateInfoBox(progressDisplay.get(i));
+			DegreePlannerUI.getRightPanel().updateInfoBox(catList.get(i));
 			if(!selectedCat.equals(selectableCatVBoxs.get(i))){
 				selectedCat.setStyle("-fx-background-color: #afafaf;");
 				selectedCat = selectableCatVBoxs.get(i);
@@ -364,7 +364,7 @@ public class CenterPanel extends Application{
         catCenter.setSpacing(8);
         catCenter.setAlignment(Pos.CENTER_LEFT);
         catCenter.setPadding(new Insets(15));
-        Text creditTitle = new Text("Completed Credits: ");
+        Text creditTitle = new Text("Completed Credits: " + ProgressManager.getCategoryCredits(catList.get(i), yearComboBox.getSelectionModel().selectedIndexProperty().getValue().toString()) + "/" + catList.get(i).getCreditsRequired());
         
         catCenter.getChildren().addAll(creditTitle);
         return catCenter;
@@ -373,8 +373,7 @@ public class CenterPanel extends Application{
 	private HBox getBottomCategoryPane(int i){
         HBox catBottom = new HBox(10);
         catBottom.setOnMouseClicked(e -> {
-			//FIXME: overload updateInfoBox for categories
-			//DegreePlannerUI.getRightPanel().updateInfoBox(progressDisplay.get(i));
+			DegreePlannerUI.getRightPanel().updateInfoBox(catList.get(i));
 			if(!selectedCat.equals(selectableCatVBoxs.get(i))){
 				selectedCat.setStyle("-fx-background-color: #afafaf;");
 				selectedCat = selectableCatVBoxs.get(i);

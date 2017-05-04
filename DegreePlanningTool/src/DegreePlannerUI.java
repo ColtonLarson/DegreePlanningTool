@@ -56,7 +56,7 @@ public class DegreePlannerUI extends Application{
 		//CenterPanel Tests
 		borderPane.setCenter(centerPanel.getPanel());
 		
-		scene = new Scene(borderPane, 1600, 800);
+		scene = new Scene(borderPane, 1600, 850);
 		window.setScene(scene);
 		window.show();
 	}
