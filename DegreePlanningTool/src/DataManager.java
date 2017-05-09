@@ -37,7 +37,6 @@ public class DataManager{
 	
 	
 	public static void initData(){
-		System.out.println("Inializing Data");
 		courseManager = new CourseManager();
 		categoryManager = new CategoryManager();
 		progressManager = new ProgressManager();
@@ -56,7 +55,6 @@ public class DataManager{
     }
 
 	public static void addCourse(String year, String sem, Course course){
-        System.out.println(year + " " + sem + " " + " " + course);
         progressManager.insert(year,sem,course);
     }
 
@@ -70,10 +68,6 @@ public class DataManager{
 
 	public static boolean isYearsEmpty(){
 		return progressManager.isEmpty();
-	}
-
-	public static void print(){
-		System.out.println(progressManager.printer());
 	}
 
 	public static void save(File filename){

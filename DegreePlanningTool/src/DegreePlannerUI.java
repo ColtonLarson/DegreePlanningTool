@@ -46,15 +46,16 @@ public class DegreePlannerUI extends Application{
 
 		borderPane.setTop(menuBar);
 
+		
+		//CenterPanel Tests
+		borderPane.setCenter(centerPanel.getPanel());
+		
 		//LeftPanel Tests
 	//	leftPanel.addYear("2017-2018");
 		borderPane.setLeft(leftPanel.getPanel());
 
 		//RightPanel Tests		
 		borderPane.setRight(rightPanel.getPanel());
-		
-		//CenterPanel Tests
-		borderPane.setCenter(centerPanel.getPanel());
 		
 		scene = new Scene(borderPane, 1600, 850);
 		window.setScene(scene);
@@ -68,9 +69,9 @@ public class DegreePlannerUI extends Application{
 			return;
 		}
 		DataManager.load(file);
-		DataManager.print();
 		leftPanel.initYear();
 		leftPanel.updateTables();
+		centerPanel.updateQuickProgress();
 	}
 
 	public static void saver(Stage mainStage){
@@ -100,6 +101,9 @@ public class DegreePlannerUI extends Application{
 		return leftPanel;
 	}
 
+	public static CenterPanel getCenterPanel(){
+        return centerPanel;
+	}
 	
 	public static RightPanel getRightPanel(){
 		return rightPanel;

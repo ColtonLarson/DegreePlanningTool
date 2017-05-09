@@ -29,27 +29,31 @@ import javafx.stage.Stage;
 
 public class CenterPanel extends Application{
 	
-	private BorderPane centerPanel = new BorderPane();
-	private BorderPane top = new BorderPane();
-	private HBox topUpper = new HBox();
+	private BorderPane centerPanel;
+	private BorderPane top;
+	private HBox topUpper;
 	
-	private HBox topLower = new HBox();
+	private HBox topLower;
 	private ComboBox searchComboBox;
 	private ComboBox categoryComboBox;
 	private ComboBox creditComboBox;
 	
-	private ScrollPane scrollPane = new ScrollPane();
+	private ScrollPane scrollPane;
 	private HBox bottom = new HBox();
-	private ArrayList<Label> quickProgress = new ArrayList<Label>();
-	private ArrayList<Course> searchDisplay = new ArrayList<Course>();
-	private ArrayList<Category> progressDisplay = new ArrayList<Category>();
-	private ArrayList<VBox> selectionableVBoxs = new ArrayList<VBox>();
-	private ArrayList<VBox> selectableCatVBoxs = new ArrayList<VBox>();
+	private ArrayList<Label> quickProgress;
+	private ArrayList<Course> searchDisplay;
+	private ArrayList<Category> progressDisplay;
+	private ArrayList<VBox> selectionableVBoxs;
+	private ArrayList<VBox> selectableCatVBoxs;
 	private VBox selected = new VBox();
 	private VBox selectedCat = new VBox();
 	private ArrayList<Category> copy;
 	private ArrayList<Category> catList;
 	private ComboBox<String> yearComboBox;
+	private Label completedCreditsLabel;
+	private int completedCredits;
+	private ArrayList<Text> completedCoursesLists;
+	private ArrayList<HBox> catBottoms;
 	
 	public CenterPanel(){
 		try {
@@ -57,7 +61,23 @@ public class CenterPanel extends Application{
 		} catch (Exception e) {
 			System.out.print(e.toString());
 		}
+		
+		centerPanel = new BorderPane();
+        top = new BorderPane();
+        topUpper = new HBox();
+        topLower = new HBox();
+        scrollPane = new ScrollPane();
+        bottom = new HBox();
+		completedCredits = 0;
+		quickProgress = new ArrayList<Label>();
+        searchDisplay = new ArrayList<Course>();
+        progressDisplay = new ArrayList<Category>();
+        selectionableVBoxs = new ArrayList<VBox>();
+        selectableCatVBoxs = new ArrayList<VBox>();
+		completedCoursesLists = new ArrayList<Text>();
+		catBottoms = new ArrayList<HBox>();
 		centerPanel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		
 		setTopPanel();
 		top.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		top.setTop(topUpper);
@@ -171,14 +191,14 @@ public class CenterPanel extends Application{
 		bottom.setBorder(new Border(new BorderStroke(Color.BLACK, 
 	            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 		//Calculate total credits taken
-		
-		quickProgress.add(new Label("Completed Credits: "));
+		completedCreditsLabel = new Label("Completed Credits: " + completedCredits);
+		quickProgress.add(completedCreditsLabel);
 		quickProgress.add(new Label("Major: Computer Science"));
 		//Get current year (TODO: update this)
-		LocalDateTime now = LocalDateTime.now();
-		String year = Integer.toString(now.getYear() - 1) + "-" + Integer.toString(now.getYear());
-		quickProgress.add(new Label("Year: " + year));
-		for(int i = 0; i < 3; i++){
+// 		LocalDateTime now = LocalDateTime.now();
+// 		String year = Integer.toString(now.getYear() - 1) + "-" + Integer.toString(now.getYear());
+// 		quickProgress.add(new Label("Year: " + year));
+		for(int i = 0; i < 2; i++){
 			quickProgress.get(i).setFont(Font.font("Verdana", FontWeight.BOLD, 14));
 			quickProgress.get(i).setTextFill(Color.WHITE);
 			quickProgress.get(i).setAlignment(Pos.CENTER);
@@ -298,6 +318,7 @@ public class CenterPanel extends Application{
         progressLabel.setFont(Font.font("Verdana", FontWeight.NORMAL, 20));
         //FIXME:
         yearComboBox = new ComboBox<String>(FXCollections.observableArrayList(DataManager.getYears()));
+        yearComboBox.getSelectionModel().selectLast();
         Button search = new Button("  Search  ");
         search.setOnMouseClicked(e -> {
             centerPanel.setTop(top);
@@ -308,7 +329,8 @@ public class CenterPanel extends Application{
         ScrollPane scrollProgress = new ScrollPane();
         VBox catProgress = new VBox();
         catProgress.setPrefSize(1200, 200);
-        catList = new ArrayList<Category>(DataManager.getCategories());
+        if(catList == null)
+            catList = new ArrayList<Category>(DataManager.getCategories());
         selectableCatVBoxs.clear();
         for(int i = 0; i < catList.size(); i++){
             BorderPane bPane = new BorderPane();
@@ -317,7 +339,8 @@ public class CenterPanel extends Application{
 		            BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 			bPane.setTop(getTopCategoryPane(i));
 			bPane.setCenter(getCenterCategoryPane(i));
-			bPane.setBottom(getBottomCategoryPane(i));
+			catBottoms.add(getBottomCategoryPane(i));
+			bPane.setBottom(catBottoms.get(i));
 			catProgress.getChildren().add(bPane);
         }
         scrollProgress.setContent(catProgress);
@@ -364,10 +387,33 @@ public class CenterPanel extends Application{
         catCenter.setSpacing(8);
         catCenter.setAlignment(Pos.CENTER_LEFT);
         catCenter.setPadding(new Insets(15));
-        Text creditTitle = new Text("Completed Credits: " + DataManager.getCategoryCredits(catList.get(i), yearComboBox.getSelectionModel().selectedIndexProperty().getValue().toString()) + "/" + catList.get(i).getCreditsRequired());
+        Text creditTitle = new Text("Completed Credits: " + DataManager.getCategoryCredits(catList.get(i), yearComboBox.getSelectionModel().getSelectedItem().toString()) + "/" + catList.get(i).getCreditsRequired());
+        yearComboBox.getSelectionModel().selectedIndexProperty().addListener(e -> {
+                    creditTitle.setText("Completed Credits: " + DataManager.getCategoryCredits(catList.get(i), yearComboBox.getSelectionModel().getSelectedItem().toString()) + "/" + catList.get(i).getCreditsRequired());
+                    completedCredits = 0;
+            updateProgressCompletedCourseLists(i);
+            if(catList == null)
+                catList = new ArrayList<Category>(DataManager.getCategories());
+            for (Category c : catList){
+                completedCredits += DataManager.getCategoryCredits(c, yearComboBox.getSelectionModel().getSelectedItem().toString());
+            }
+            if(completedCreditsLabel != null)
+                completedCreditsLabel.setText("Completed Credits: " + completedCredits +" (" +yearComboBox.getSelectionModel().getSelectedItem().toString()+")");
+        });
         
         catCenter.getChildren().addAll(creditTitle);
         return catCenter;
+	}
+	
+	public void updateQuickProgress(){
+            completedCredits = 0;
+            if(catList == null)
+                catList = new ArrayList<Category>(DataManager.getCategories());
+            for (Category c : catList){
+                completedCredits += DataManager.getCategoryCredits(c, DegreePlannerUI.getLeftPanel().getYearsComboBox().getSelectionModel().getSelectedItem().toString());
+            }
+            if(completedCreditsLabel != null)
+                completedCreditsLabel.setText("Completed Credits: " + completedCredits +" (" +DegreePlannerUI.getLeftPanel().getYearsComboBox().getSelectionModel().getSelectedItem().toString()+")");
 	}
 	
 	private HBox getBottomCategoryPane(int i){
@@ -384,10 +430,29 @@ public class CenterPanel extends Application{
         catBottom.setSpacing(8);
         catBottom.setAlignment(Pos.CENTER_LEFT);
         catBottom.setPadding(new Insets(15));
-        Text courseTitle = new Text("Completed Courses: ");
-        
-        catBottom.getChildren().addAll(courseTitle);
+        setProgressCompletedCourseLists(i);
+        catBottom.getChildren().addAll(completedCoursesLists.get(i));
         return catBottom;
+	}
+	
+	private Text setProgressCompletedCourseLists(int i){
+        String completedCourses = "Completed Courses: ";
+        for(Course c: DataManager.getCategoryClassesTaken(catList.get(i), yearComboBox.getSelectionModel().getSelectedItem().toString())){
+            completedCourses += (c.getCourseID() + ", ");
+        }
+        Text completedCoursesText = new Text((completedCourses.length() != 0) ? completedCourses.substring(0, completedCourses.length() - 2) : completedCourses);
+        completedCoursesLists.add(completedCoursesText);
+        return completedCoursesLists.get(i);
+	}
+	
+	private void updateProgressCompletedCourseLists(int i){
+        String completedCourses = "Completed Courses: " ;
+        for(Course c: DataManager.getCategoryClassesTaken(catList.get(i), yearComboBox.getSelectionModel().getSelectedItem().toString())){
+            completedCourses += (c.getCourseID() + ", ");
+        }
+        Text completedCoursesText = new Text((completedCourses.length() != 0) ? completedCourses.substring(0, completedCourses.length() - 2) : completedCourses);
+        completedCoursesLists.set(i, completedCoursesText);
+        catBottoms.get(i).getChildren().setAll(completedCoursesLists.get(i));
 	}
 }
 

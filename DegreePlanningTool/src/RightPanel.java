@@ -18,6 +18,7 @@ public class RightPanel extends Application{
 	private Label title = new Label();
 	private Text prereq = new Text();
 	private Text restrictions = new Text();
+	private Text credits = new Text();
 	
 	public RightPanel(){
 		setUpPanel();
@@ -64,8 +65,11 @@ public class RightPanel extends Application{
 		InfoBox.getChildren().add(prereq);
 		restrictions.setFill(Color.WHITE);
 		InfoBox.getChildren().add(restrictions);
+		credits.setFill(Color.WHITE);
+		InfoBox.getChildren().add(credits);
 	}
 	
+	//ADD Credits, 
 	public void updateInfoBox(Course course){
 		title.setWrapText(true);
 		title.setText(course.getCourseName() + " Information");
@@ -75,6 +79,8 @@ public class RightPanel extends Application{
 		prereq.setText("Prerequisite(s): " + course.getPrerequisite() + "\n");
 		restrictions.setWrappingWidth(400);
 		restrictions.setText("Restrictions: " + (course.getRestriction().isEmpty() ? "None" : course.getRestriction()));
+		credits.setWrappingWidth(400);
+		credits.setText("Credits: " + ((course.getCredits() == -1) ? "[1-18]": course.getCredits()));
 	}
 	
 	public void updateInfoBox(Category category){

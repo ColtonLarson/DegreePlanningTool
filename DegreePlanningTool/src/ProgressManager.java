@@ -17,7 +17,6 @@ public class ProgressManager {
 	public static int getCategoryCredits(Category c, String year){
 	    int total = 0;
         for(Progress p : years){
-            System.out.println("Year: " + year + "Total: " + total);
             total += p.countCredits(c);
             if(p.getYear().equals(year)){
 			    return total;
@@ -75,7 +74,6 @@ public class ProgressManager {
 		for(Progress p : years){
 			if(p.equals(year)){
 				p.insert(sem,course);
-				System.out.println("Inserting: " + year + " " + sem + " " + course);
 			}
 		}
 	}
@@ -89,9 +87,6 @@ public class ProgressManager {
 	//Removes all instances of a course from a specific Year
 	public static boolean remove(String year,String courseName){
 		boolean found = false;
-
-		System.out.println("Removing: " + year + " " + courseName);		
-		
 		if(years.contains(new Progress(year))){
 			for(Progress p : years){
 				if(p.equals(year)){
@@ -104,8 +99,6 @@ public class ProgressManager {
 	}
 
 	public static void readData(File filename){
-		//We are here now
-		System.out.println("We are here now");
 		TreeSet<Progress> save = new TreeSet<Progress>(years);
 
 
@@ -144,7 +137,6 @@ public class ProgressManager {
 
 		for(Course c : course){
 			insert(year,semster,c);	
-			System.out.println("Creating Course: " + year + " - " + sem + " - " + c);
 		}		
 	}
 

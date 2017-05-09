@@ -65,7 +65,6 @@ public class LeftPanel extends Application {
 		yearComboBox.setDisable(true);
 		//updateTables();
 		
-		
 	}
 
 	@Override
@@ -149,6 +148,8 @@ public class LeftPanel extends Application {
 			table.getColumns().addAll(classCol, creditCol);
                 
 			tables.add(table);
+			
+			
 		}
 	}
 
@@ -168,12 +169,12 @@ public class LeftPanel extends Application {
 		if(!DataManager.isYearsEmpty()){
 			yearComboBox.setDisable(false);
 		}
-        
+        //update QuickAccess information
+        DegreePlannerUI.getCenterPanel().updateQuickProgress();
 	}
 
     private void updateTable(ArrayList<Course> sem, int i){
         ObservableList<Course> classes = FXCollections.observableArrayList(sem);
-        System.out.println("Test: " + classes);
         int total = 0;
         for(Course c : sem){
             total += c.getCredits();
@@ -182,10 +183,7 @@ public class LeftPanel extends Application {
 		tables.get(i).setItems(classes);
     }
 
-	public void addYear(String year) {
-		System.out.println("Adding Year: " + year);
-		System.out.println("Printing Data: ");
-		DataManager.print();	
+	public void addYear(String year) {	
 		if(!validYear(year)){
 			AlertBox.display("Add Year", "The year format is: 'XXXX-XXXX'");
 		    return;
@@ -229,6 +227,7 @@ public class LeftPanel extends Application {
 		}
 		ytf.setText("");
 		updateTables();
+        yearComboBox.getSelectionModel().selectLast();
     }
 
 	private void removeCourse(String course) {
@@ -266,5 +265,9 @@ public class LeftPanel extends Application {
 	
 	public ObservableList<String> getYears(){
         return yearComboBox.getItems();
+	}
+	
+	public ComboBox<String> getYearsComboBox(){
+        return yearComboBox;
 	}
 }
